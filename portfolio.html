@@ -19,6 +19,7 @@
         --accent-2: #4f9db5;
         --card: #f7fbff;
         --border: rgba(21, 34, 56, 0.12);
+        --card-outline: rgba(49, 138, 165, 0.72);
         --shadow: 0 14px 36px rgba(22, 51, 84, 0.14);
       }
 
@@ -274,7 +275,7 @@
         padding: 24px;
         border-radius: 18px;
         box-shadow: var(--shadow);
-        border: 1px solid var(--border);
+        border: 1px solid var(--card-outline);
         transition: transform 0.22s ease, box-shadow 0.22s ease;
       }
 
@@ -289,7 +290,7 @@
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 239, 254, 0.9));
         border-radius: 18px;
         overflow: hidden;
-        border: 1px solid var(--border);
+        border: 1px solid var(--card-outline);
         box-shadow: var(--shadow);
         transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
         position: relative;
