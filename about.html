@@ -19,6 +19,7 @@
         --accent-2: #4f9db5;
         --card: #f7fbff;
         --border: rgba(21, 34, 56, 0.12);
+        --card-outline: rgba(49, 138, 165, 0.72);
         --shadow: 0 14px 36px rgba(22, 51, 84, 0.14);
       }
 
@@ -310,9 +311,29 @@
         align-items: center;
       }
 
+      .signature {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
       .signature img {
         width: 100%;
-        max-width: 260px;
+        max-width: 320px;
+        display: block;
+        margin: 0 auto;
+        animation: signatureFloat 3.8s ease-in-out infinite;
+        filter: drop-shadow(0 8px 18px rgba(22, 51, 84, 0.22));
+      }
+
+      @keyframes signatureFloat {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-8px) scale(1.02);
+        }
       }
 
       .table-wrap {
@@ -374,29 +395,95 @@
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 24px;
       }
-
       .team-card {
         background: linear-gradient(175deg, rgba(255, 255, 255, 0.97), rgba(230, 241, 255, 0.9));
         border-radius: 18px;
         overflow: hidden;
         box-shadow: var(--shadow);
-        border: 1px solid var(--border);
+        border: 1px solid var(--card-outline);
         transition: transform 0.22s ease, box-shadow 0.22s ease;
+        text-align: center;
+        padding-top: 18px;
+      }
+
+      .reveal-up {
+        opacity: 0;
+        transform: translateY(34px);
+        transition: opacity 0.68s ease, transform 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform, opacity;
+      }
+
+      .reveal-up.is-visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .team-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 18px 34px rgba(18, 52, 89, 0.2);
       }
-
       .team-photo {
-        height: 240px;
+        width: 190px;
+        height: 190px;
+        margin: 0 auto 10px;
+        border-radius: 50%;
         background-size: cover;
-        background-position: center;
+        background-position: center top;
+        border: 3px solid rgba(49, 138, 165, 0.72);
+        box-shadow: 0 10px 20px rgba(22, 51, 84, 0.16);
+      }
+      .team-body {
+        padding: 14px 18px 20px;
+      }
+      .testimonials-wrap {
+        max-width: 900px;
+        margin: 0 auto;
       }
 
-      .team-body {
-        padding: 18px;
+      .testimonial-frame {
+        overflow: hidden;
+        border-radius: 22px;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .testimonial-track {
+        display: flex;
+        transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .testimonial-slide {
+        min-width: 33.3333%;
+        padding: 6px;
+      }
+
+      .testimonial-card {
+        background: #ffffff;
+        border: 1px solid var(--card-outline);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 6px 16px rgba(18, 52, 89, 0.08);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 14px 28px rgba(18, 52, 89, 0.16);
+      }
+
+
+      .testimonial-quote {
+        margin: 0;
+        font-size: 1.12rem;
+        line-height: 1.72;
+        color: #20334e;
+      }
+
+      .testimonial-author {
+        margin-top: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        font-size: 1.05rem;
       }
 
       .form {
@@ -472,7 +559,6 @@
       .muted {
         color: var(--muted);
       }
-
       @media (max-width: 760px) {
         .nav {
           flex-direction: column;
@@ -493,6 +579,16 @@
 
         .split {
           grid-template-columns: 1fr;
+        }
+
+        .team-photo {
+          width: 165px;
+          height: 165px;
+        }
+
+        .testimonial-slide {
+          min-width: 100%;
+          padding: 8px;
         }
       }
     </style>
@@ -530,50 +626,19 @@
             <p>
               We are based in Westlands, Nairobi and collaborate closely with clients to ensure every project is delivered with clarity and excellence.
             </p>
+            <h3>Our Story</h3>
+            <p>
+              After graduating from campus, Braxton Muma began taking on solo architectural design projects. That early independent work became a major source of referrals and steadily expanded his client base. At the time, he operated from his father's home, which served as his first office.
+            </p>
+            <p>
+              As demand grew, Braxton decided to formalize the practice into a company and called his close campus friend, Ibrahim Koros, whose consistency and work ethic he deeply trusted. While they were developing the company name, they also identified the need for strong structural expertise and brought in Wilfred Omondi, a structural specialist with more than seven years of design experience and a proven track record from their campus years. Together, they agreed on the name <strong>Tri-EcoTeq Architects</strong>.
+            </p>
+            <p>
+              Later, they onboarded Joseph Mbugua, a former campus colleague recognized for exceptional 3D software modelling and high-quality design rendering.
+            </p>
           </div>
           <div class="signature">
             <img src="assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq Architects logo" />
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <div class="section-header">
-            <h2>Shareholders</h2>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Contribution</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Braxtone Muma</td>
-                  <td>Architectural Planner</td>
-                  <td>Founder</td>
-                </tr>
-                <tr>
-                  <td>Ibrahim Koros</td>
-                  <td>3D & Animated Production</td>
-                  <td>Co-Founder</td>
-                </tr>
-                <tr>
-                  <td>Joseph Mbugua</td>
-                  <td>Arch. Working Drawings</td>
-                  <td>Alumni Staff</td>
-                </tr>
-                <tr>
-                  <td>Wilfred Okoth</td>
-                  <td>Structural Designer</td>
-                  <td>Alumni Staff</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
@@ -585,7 +650,7 @@
             <p class="muted">A dedicated multidisciplinary team delivering thoughtful, buildable architecture.</p>
           </div>
           <div class="team-grid">
-            <div class="team-card">
+            <div class="team-card reveal-up">
               <div class="team-photo" style="background-image: url('assets/team/Braxton Muma.png');"></div>
               <div class="team-body">
                 <h3>Braxton Muma</h3>
@@ -593,7 +658,7 @@
                 <p>Architectural, mechanical, and electrical planning with a focus on integrated delivery.</p>
               </div>
             </div>
-            <div class="team-card">
+            <div class="team-card reveal-up">
               <div class="team-photo" style="background-image: url('assets/team/Ibrahim Koros.jpg');"></div>
               <div class="team-body">
                 <h3>Ibrahim Kiprotich</h3>
@@ -601,7 +666,7 @@
                 <p>3D architectural modelling and visualization for clarity across design stages.</p>
               </div>
             </div>
-            <div class="team-card">
+            <div class="team-card reveal-up">
               <div class="team-photo" style="background-image: url('assets/team/Wilfred Omondi.png');"></div>
               <div class="team-body">
                 <h3>Wilfred Omondi</h3>
@@ -609,7 +674,7 @@
                 <p>Architectural design and structural planning focused on performance and durability.</p>
               </div>
             </div>
-            <div class="team-card">
+            <div class="team-card reveal-up">
               <div class="team-photo" style="background-image: url('assets/team/Joseph Mbugua.jpg');"></div>
               <div class="team-body">
                 <h3>Joseph Mbugua</h3>
@@ -620,8 +685,81 @@
           </div>
         </div>
       </section>
-
-      
+      <section id="testimonials" class="section alt">
+        <div class="container">
+          <div class="section-header testimonials-wrap">
+            <h2>Testimonials</h2>
+            <p class="muted">We value client feedback and thank you for your continued support.</p>
+            <p class="muted">Though we are new in our official capacity, we have proven ourselves by delivering quality work.</p>
+          </div>
+          <div class="testimonials-wrap">
+            <div class="testimonial-frame reveal-up" id="testimonialFrame">
+              <div class="testimonial-track" id="testimonialTrack">
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"Though new in their official capacity, they have proven themselves by doing an excellent job. I can happily recommend this firm to others."</p>
+                    <p class="testimonial-author">Jennifer T.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"I am fully confident that my next project will also be handled by this team."</p>
+                    <p class="testimonial-author">Brian P.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"I came up with an idea and watched them develop it into something great. I truly consider them one of the most pocket-friendly architectural firms."</p>
+                    <p class="testimonial-author">Angela C.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"Their communication was clear from concept to final drawings. We always knew the next step, and that made the process smooth."</p>
+                    <p class="testimonial-author">Martin K.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"They balanced beauty and budget very well. The final design looked premium, yet every decision still made financial sense."</p>
+                    <p class="testimonial-author">Grace W.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"I appreciated how practical their structural advice was. They explained options clearly and helped us choose with confidence."</p>
+                    <p class="testimonial-author">Sam O.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"The 3D visuals gave us confidence before construction started. What we saw in design is exactly what we are building."</p>
+                    <p class="testimonial-author">Linet N.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"Their team listened carefully and customized the design to our lifestyle. The result feels personal and functional."</p>
+                    <p class="testimonial-author">Kevin M.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"Timelines were respected, and revisions were handled professionally. The service quality stayed high throughout the project."</p>
+                    <p class="testimonial-author">Ruth A.</p>
+                  </div>
+                </article>
+                <article class="testimonial-slide">
+                  <div class="testimonial-card">
+                    <p class="testimonial-quote">"From planning to presentation, they were reliable and detail-oriented. I would confidently engage them again."</p>
+                    <p class="testimonial-author">Daniel E.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -647,7 +785,7 @@
           </ul>
         </div>
       </div>
-      <div class="container footer-bottom">Copyright © 2026 Tri-EcoTeq Architects. All rights reserved.</div>
+      <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
     <script>
@@ -672,8 +810,107 @@
         yearFilter.addEventListener("change", applyFilters);
       }
 
-      
+      const revealItems = document.querySelectorAll(".reveal-up");
+      if ("IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.18 });
+
+        revealItems.forEach(item => revealObserver.observe(item));
+      } else {
+        revealItems.forEach(item => item.classList.add("is-visible"));
+      }
+
+      const testimonialTrack = document.getElementById("testimonialTrack");
+      const testimonialFrame = document.getElementById("testimonialFrame");
+
+      if (testimonialTrack && testimonialFrame) {
+        let slides = Array.from(testimonialTrack.querySelectorAll(".testimonial-slide"));
+        const originalCount = slides.length;
+        let visible = window.innerWidth <= 760 ? 1 : 3;
+        let currentIndex = 0;
+        let timer = null;
+
+        function clearClones() {
+          testimonialTrack.querySelectorAll(".testimonial-slide.is-clone").forEach(node => node.remove());
+        }
+
+        function setSlideWidths() {
+          const width = 100 / visible;
+          testimonialTrack.querySelectorAll(".testimonial-slide").forEach(slide => {
+            slide.style.minWidth = width + "%";
+          });
+        }
+
+        function buildLoop() {
+          clearClones();
+          slides = Array.from(testimonialTrack.querySelectorAll(".testimonial-slide:not(.is-clone)"));
+          const clonesNeeded = Math.min(visible, slides.length);
+          for (let i = 0; i < clonesNeeded; i++) {
+            const clone = slides[i].cloneNode(true);
+            clone.classList.add("is-clone");
+            testimonialTrack.appendChild(clone);
+          }
+          setSlideWidths();
+          currentIndex = 0;
+          testimonialTrack.style.transition = "none";
+          testimonialTrack.style.transform = "translateX(0%)";
+          // Force reflow so the no-transition reset is applied before resuming animation.
+          void testimonialTrack.offsetWidth;
+          testimonialTrack.style.transition = "transform 0.72s cubic-bezier(0.22, 1, 0.36, 1)";
+        }
+
+        function nextSlide() {
+          currentIndex += 1;
+          testimonialTrack.style.transform = "translateX(-" + ((100 / visible) * currentIndex) + "%)";
+        }
+
+        function startScroll() {
+          stopScroll();
+          timer = setInterval(nextSlide, 7600);
+        }
+
+        function stopScroll() {
+          if (timer) clearInterval(timer);
+        }
+
+        testimonialTrack.addEventListener("transitionend", () => {
+          if (currentIndex >= originalCount) {
+            testimonialTrack.style.transition = "none";
+            currentIndex = 0;
+            testimonialTrack.style.transform = "translateX(0%)";
+            void testimonialTrack.offsetWidth;
+            testimonialTrack.style.transition = "transform 0.72s cubic-bezier(0.22, 1, 0.36, 1)";
+          }
+        });
+
+        window.addEventListener("resize", () => {
+          const nextVisible = window.innerWidth <= 760 ? 1 : 3;
+          if (nextVisible !== visible) {
+            visible = nextVisible;
+            buildLoop();
+            startScroll();
+          }
+        });
+
+        testimonialFrame.addEventListener("mouseenter", stopScroll);
+        testimonialFrame.addEventListener("mouseleave", startScroll);
+        testimonialFrame.addEventListener("focusin", stopScroll);
+        testimonialFrame.addEventListener("focusout", startScroll);
+
+        buildLoop();
+        startScroll();
+      }
     </script>
   </body>
 </html>
+
+
+
+
+
 

@@ -400,16 +400,17 @@
       }
 
       .contact-form-card {
-        background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(228, 242, 255, 0.88));
-        border: 1px solid rgba(21, 34, 56, 0.12);
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 18px 38px rgba(18, 52, 89, 0.14);
+        background: #e2e2e2;
+        border: 1.5px solid rgba(21, 34, 56, 0.2);
+        border-radius: 16px;
+        padding: 18px 18px 16px;
+        box-shadow: none;
         flex: 1;
+        min-height: auto;
       }
 
       #contact .grid-2 {
-        align-items: stretch;
+        align-items: start;
       }
 
       #contact .grid-2 > div {
@@ -418,18 +419,18 @@
       }
 
       .contact-info-column {
-        padding-top: 92px;
+        padding-top: 0;
       }
 
       .form {
         display: grid;
-        gap: 14px;
+        gap: 10px;
       }
 
       .form-row {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+        grid-template-columns: 1fr;
+        gap: 10px;
       }
 
       .field {
@@ -438,19 +439,19 @@
       }
 
       .field-label {
-        font-size: 0.92rem;
-        font-weight: 600;
-        color: #1c3554;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #101010;
       }
 
       .input, .textarea {
         width: 100%;
-        padding: 12px 14px;
-        border-radius: 12px;
-        border: 1px solid rgba(21, 34, 56, 0.2);
+        padding: 9px 10px;
+        border-radius: 0;
+        border: 1px solid #df4444;
         font-family: inherit;
-        background: rgba(255, 255, 255, 0.88);
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        background: #fff;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
       }
 
       .input::placeholder,
@@ -461,13 +462,13 @@
       .input:focus,
       .textarea:focus {
         outline: none;
-        border-color: rgba(31, 111, 139, 0.8);
+        border-color: #b92929;
         background: #fff;
-        box-shadow: 0 0 0 4px rgba(79, 157, 181, 0.2);
+        box-shadow: none;
       }
 
       .textarea {
-        min-height: 160px;
+        min-height: 96px;
         resize: vertical;
       }
 
@@ -478,59 +479,125 @@
       }
 
       .form .button {
-        width: fit-content;
-        min-width: 190px;
-        background: linear-gradient(135deg, #2c86a5, #1f6f8b);
+        width: 100%;
+        min-width: 0;
+        border-radius: 0;
+        background: #d97740;
       }
 
       .form .button:hover {
-        background: linear-gradient(135deg, #1f6f8b, #19596f);
+        background: #c96933;
       }
 
       .contact-info-card {
-        background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(228, 242, 255, 0.88));
-        border: 1px solid rgba(21, 34, 56, 0.12);
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 18px 38px rgba(18, 52, 89, 0.14);
+        background: #dcdcdc;
+        border: 1.5px solid rgba(21, 34, 56, 0.2);
+        border-radius: 16px;
+        padding: 16px 22px;
+        box-shadow: none;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        justify-content: flex-start;
+        gap: 12px;
         flex: 1;
+        min-height: auto;
       }
 
       .contact-info-card h3 {
         margin-top: 0;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
+        font-size: 2rem;
       }
 
       .contact-info-body {
         display: grid;
-        gap: 12px;
-        color: #284566;
-        line-height: 1.6;
+        gap: 2px;
+        color: #1f1f1f;
+        line-height: 1.45;
       }
 
       .contact-line {
         margin: 0;
-        font-size: 0.98rem;
+        font-size: 1rem;
       }
 
       .contact-divider {
-        margin: 4px 0;
+        margin: 8px 0;
         border: 0;
         height: 1px;
-        background: linear-gradient(90deg, rgba(21, 34, 56, 0.12), rgba(21, 34, 56, 0.02));
+        background: #b9b9b9;
       }
 
       .contact-info-card a {
-        color: #1f6f8b;
-        font-weight: 600;
+        color: #1f1f1f;
+        font-weight: 700;
       }
 
       .contact-info-card .form-note {
-        margin-top: auto;
+        margin-top: 4px;
+        padding-top: 0;
+      }
+
+      .captcha-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid #bdbdbd;
+        border-radius: 0;
+        background: #f4f4f4;
+      }
+
+      .captcha-question {
+        font-weight: 700;
+        color: #1c3554;
+        letter-spacing: 0.2px;
+      }
+
+      .captcha-refresh {
+        min-width: auto;
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+
+      .open-hours {
+        border-top: 0;
         padding-top: 10px;
+        display: grid;
+        gap: 2px;
+        margin-top: 10px;
+      }
+
+      .open-hours h3 {
+        margin: 0 0 6px;
+        font-size: 2rem;
+      }
+
+      .location-map {
+        margin-top: 18px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1.5px solid rgba(21, 34, 56, 0.2);
+        box-shadow: none;
+      }
+
+      .location-map iframe {
+        width: 100%;
+        height: 240px;
+        border: 0;
+        display: block;
+      }
+
+      #contact h2 {
+        text-align: center;
+        font-size: clamp(2.2rem, 4.6vw, 3.2rem);
+        margin-bottom: 8px;
+      }
+
+      #contact .lead {
+        text-align: center;
+        margin: 0 auto 16px;
       }
 
       .site-footer {
@@ -616,6 +683,11 @@
           padding-top: 0;
         }
 
+        .contact-form-card,
+        .contact-info-card {
+          min-height: auto;
+        }
+
         .split {
           grid-template-columns: 1fr;
         }
@@ -646,10 +718,10 @@
       <section id="contact" class="section alt">
         <div class="container grid-2">
           <div>
-            <h2>Contact</h2>
+            <h2>Contact Us</h2>
             <p class="lead">Tell us about your project. We respond quickly and thoughtfully.</p>
             <div class="contact-form-card">
-              <form class="form">
+              <form class="form" id="contactForm">
                 <div class="form-row">
                   <label class="field">
                     <span class="field-label">Name</span>
@@ -661,12 +733,21 @@
                   </label>
                 </div>
                 <label class="field">
-                  <span class="field-label">Subject</span>
-                  <input class="input" type="text" placeholder="Project inquiry" />
+                  <span class="field-label">Phone</span>
+                  <input class="input" type="tel" placeholder="+254..." autocomplete="tel" />
                 </label>
                 <label class="field">
                   <span class="field-label">Message</span>
                   <textarea class="textarea" placeholder="Tell us about your project"></textarea>
+                </label>
+                <label class="field captcha-field">
+                  <span class="field-label">Captcha</span>
+                  <div class="captcha-row">
+                    <span class="captcha-question" id="captchaQuestion">Loading challenge...</span>
+                    <button class="button ghost captcha-refresh" type="button" id="captchaRefreshBtn">Refresh</button>
+                  </div>
+                  <input class="input" type="text" id="captchaInput" placeholder="Type the answer" autocomplete="off" />
+                  <p class="form-note" id="captchaFeedback">Please solve the captcha before sending.</p>
                 </label>
                 <p class="form-note">We typically respond within one business day.</p>
                 <button class="button" type="submit">Send Message</button>
@@ -675,18 +756,39 @@
           </div>
           <div class="contact-info-column">
             <div class="contact-info-card">
-            <h3>Studio Address</h3>
+            <p class="contact-line">Come tour our facility! Call us to book your tour today:</p>
             <div class="contact-info-body">
-              <p class="contact-line"><strong>Tri-EcoTeq Architects</strong></p>
+              <p class="contact-line"><a href="tel:+254748684366">+254748684366</a></p>
+              <p class="contact-line"><a href="tel:+254728240363">+254728240363</a></p>
+              <p class="contact-line"><a href="tel:+254743945932">+254743945932</a></p>
+            </div>
+            <div class="open-hours">
+              <h3>Find Us</h3>
               <p class="contact-line">P.O. Box 45854-00100</p>
               <p class="contact-line">WoodVale Avenue, Westlands</p>
               <p class="contact-line">Nairobi, Kenya</p>
-              <hr class="contact-divider" />
-              <p class="contact-line">Cell: <a href="tel:+254728240363">+254728240363</a></p>
               <p class="contact-line">Email: <a href="mailto:triecoteq@gmail.com">triecoteq@gmail.com</a></p>
             </div>
-            <p class="form-note">Available Monday to Saturday during working hours.</p>
+            <div class="open-hours">
+              <h3>Open Hours</h3>
+              <p class="contact-line"><strong>Monday-Thursday:</strong> 8:00 AM-5:00 PM</p>
+              <p class="contact-line"><strong>Friday:</strong> 8:00 AM-4:00 PM</p>
+              <p class="contact-line"><strong>Saturday:</strong> 10:30 AM-3:00 PM</p>
+              <p class="contact-line"><strong>Sunday:</strong> Closed</p>
+              <p class="form-note">* Holiday hours may vary.</p>
+
             </div>
+            </div>
+          </div>
+        </div>
+        <div class="container" style="padding-top: 18px; padding-bottom: 8px;">
+          <div class="location-map" aria-label="Map showing Tri-EcoTeq location">
+            <iframe
+              title="Tri-EcoTeq Architects location map"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Reliance+Centre+Woodvale+Avenue+Westlands+Nairobi&output=embed">
+            </iframe>
           </div>
         </div>
       </section>
@@ -715,7 +817,7 @@
           </ul>
         </div>
       </div>
-      <div class="container footer-bottom">Copyright © 2026 Tri-EcoTeq Architects. All rights reserved.</div>
+      <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
     <script>
@@ -740,7 +842,71 @@
         yearFilter.addEventListener("change", applyFilters);
       }
 
-      
+      const contactForm = document.getElementById("contactForm");
+      const captchaQuestionEl = document.getElementById("captchaQuestion");
+      const captchaInputEl = document.getElementById("captchaInput");
+      const captchaRefreshBtn = document.getElementById("captchaRefreshBtn");
+      const captchaFeedbackEl = document.getElementById("captchaFeedback");
+      let captchaAnswer = null;
+
+      function generateCaptcha() {
+        const a = Math.floor(Math.random() * 8) + 2;
+        const b = Math.floor(Math.random() * 8) + 2;
+        captchaAnswer = a + b;
+        if (captchaQuestionEl) captchaQuestionEl.textContent = a + " + " + b + " = ?";
+        if (captchaFeedbackEl) {
+          captchaFeedbackEl.style.color = "";
+          captchaFeedbackEl.textContent = "Please solve the captcha before sending.";
+        }
+        if (captchaInputEl) captchaInputEl.value = "";
+      }
+
+      if (captchaRefreshBtn) {
+        captchaRefreshBtn.addEventListener("click", generateCaptcha);
+      }
+
+      if (contactForm) {
+        generateCaptcha();
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const response = Number((captchaInputEl && captchaInputEl.value ? captchaInputEl.value : "").trim());
+          if (!Number.isFinite(response) || response !== captchaAnswer) {
+            if (captchaFeedbackEl) {
+              captchaFeedbackEl.style.color = "#b42318";
+              captchaFeedbackEl.textContent = "Incorrect captcha. Please try again.";
+            }
+            generateCaptcha();
+            return;
+          }
+
+          if (captchaFeedbackEl) {
+            captchaFeedbackEl.style.color = "#166534";
+            captchaFeedbackEl.textContent = "Captcha passed. Your message is ready to send.";
+          }
+
+          contactForm.reset();
+          generateCaptcha();
+        });
+      }
+
+      const contactFormCard = document.querySelector(".contact-form-card");
+      const contactInfoCard = document.querySelector(".contact-info-card");
+
+      function syncContactCardHeights() {
+        if (!contactFormCard || !contactInfoCard) return;
+        contactFormCard.style.height = "auto";
+        contactInfoCard.style.height = "auto";
+
+        if (window.innerWidth <= 760) return;
+
+        const tallest = Math.max(contactFormCard.offsetHeight, contactInfoCard.offsetHeight);
+        contactFormCard.style.height = tallest + "px";
+        contactInfoCard.style.height = tallest + "px";
+      }
+
+      window.addEventListener("resize", syncContactCardHeights);
+      syncContactCardHeights();
+
     </script>
   </body>
 </html>
