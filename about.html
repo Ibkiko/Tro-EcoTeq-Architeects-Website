@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/theme-toggle.css" />
     <style>
       :root {
         --bg: #e3f0fb;
@@ -609,6 +610,22 @@
           <a href="portfolio.html">Portfolio</a>
           <a class="cta" href="contact.html">Contact</a>
           <a class="cta" href="buy-plan.html">Buy Plan</a>
+          <button class="theme-toggle theme-toggle-nav" data-theme-toggle type="button" aria-label="Toggle light and dark theme" aria-pressed="false" title="Toggle theme">
+            <span class="theme-toggle-track" aria-hidden="true"></span>
+            <span class="theme-toggle-icon moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M14.8 3.2a8.8 8.8 0 1 0 6 15 8.1 8.1 0 0 1-6.8-8 8.1 8.1 0 0 1 .8-7z" fill="currentColor"></path>
+                <path d="M18.5 6.2l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5.5-1.4zm2.6 4.4l.3.9.9.3-.9.3-.3.9-.3-.9-.9-.3.9-.3.3-.9z" fill="currentColor"></path>
+              </svg>
+            </span>
+            <span class="theme-toggle-icon sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <path d="M12 2.5v2.4M12 19.1v2.4M21.5 12h-2.4M4.9 12H2.5M18.7 5.3l-1.7 1.7M7 17l-1.7 1.7M18.7 18.7L17 17M7 7l-1.7-1.7"></path>
+              </svg>
+            </span>
+            <span class="theme-toggle-thumb" aria-hidden="true"></span>
+          </button>
         </nav>
       </div>
     </header>
@@ -788,6 +805,7 @@
       <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
+    <script src="assets/theme-toggle.js"></script>
     <script>
       const categoryFilter = document.getElementById("categoryFilter");
       const yearFilter = document.getElementById("yearFilter");

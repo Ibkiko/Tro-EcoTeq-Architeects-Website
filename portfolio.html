@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/theme-toggle.css" />
     <style>
       :root {
         --bg: #e3f0fb;
@@ -23,6 +24,19 @@
         --shadow: 0 14px 36px rgba(22, 51, 84, 0.14);
       }
 
+      body[data-theme="dark"] {
+        --bg: #0f1722;
+        --bg-alt: #111f2d;
+        --text: #ebf3fb;
+        --muted: #9cb1c5;
+        --accent: #8ed5ec;
+        --accent-2: #4f9db5;
+        --card: #142131;
+        --border: rgba(210, 227, 244, 0.12);
+        --card-outline: rgba(142, 213, 236, 0.34);
+        --shadow: 0 18px 38px rgba(0, 0, 0, 0.32);
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -34,6 +48,13 @@
         background:
           radial-gradient(circle at 12% 10%, #d9ecff 0%, #c8e2f9 36%, transparent 60%),
           linear-gradient(180deg, #d5e8f8 0%, #deedf9 52%, var(--bg) 100%);
+        transition: background 0.35s ease, color 0.35s ease;
+      }
+
+      body[data-theme="dark"] {
+        background:
+          radial-gradient(circle at 14% 8%, rgba(79, 157, 181, 0.18) 0%, rgba(17, 31, 45, 0) 38%),
+          linear-gradient(180deg, #122030 0%, #0f1722 52%, var(--bg) 100%);
       }
 
       a {
@@ -66,6 +87,12 @@
         justify-content: space-between;
         padding: 14px 0;
         gap: 16px;
+      }
+
+      .nav-tools {
+        display: flex;
+        align-items: center;
+        gap: 14px;
       }
 
       .brand {
@@ -142,6 +169,118 @@
       .nav-links .cta:hover {
         background: rgba(58, 90, 75, 0.12);
         color: var(--accent);
+      }
+
+      body[data-theme="dark"] .site-header {
+        background: linear-gradient(120deg, rgba(18, 29, 43, 0.94), rgba(14, 23, 34, 0.92));
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+      }
+
+      body[data-theme="dark"] .nav-links {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      body[data-theme="dark"] .nav-links a,
+      body[data-theme="dark"] .nav-links .cta {
+        color: #d8e5f1;
+      }
+
+      body[data-theme="dark"] .nav-links a:hover,
+      body[data-theme="dark"] .nav-links .cta:hover {
+        background: rgba(142, 213, 236, 0.12);
+        color: var(--accent);
+      }
+
+      .theme-toggle {
+        position: relative;
+        width: 124px;
+        height: 58px;
+        border: 0;
+        padding: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(223, 233, 243, 0.92));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.85),
+          0 10px 20px rgba(20, 30, 42, 0.12);
+        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      }
+
+      .theme-toggle:hover {
+        transform: translateY(-1px);
+      }
+
+      .theme-toggle-track {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #262a31 0%, #11151b 50%, #e8eaee 50%, #f4f5f7 100%);
+      }
+
+      .theme-toggle-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        color: #0d1117;
+        opacity: 0.78;
+        transition: opacity 0.3s ease, color 0.3s ease;
+        pointer-events: none;
+      }
+
+      .theme-toggle-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .theme-toggle-icon.moon {
+        left: 28px;
+        color: #f5f7fa;
+        opacity: 1;
+      }
+
+      .theme-toggle-icon.sun {
+        right: 28px;
+      }
+
+      .theme-toggle-thumb {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+        box-shadow:
+          0 6px 14px rgba(0, 0, 0, 0.2),
+          inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        transition: transform 0.3s ease, background 0.3s ease;
+      }
+
+      .theme-toggle[aria-pressed="true"] .theme-toggle-thumb {
+        transform: translateX(66px);
+        background: linear-gradient(180deg, #323b46 0%, #1d242d 100%);
+      }
+
+      .theme-toggle[aria-pressed="true"] .theme-toggle-icon.sun {
+        color: #56697d;
+        opacity: 0.5;
+      }
+
+      .theme-toggle[aria-pressed="true"] .theme-toggle-icon.moon {
+        opacity: 1;
+      }
+
+      .theme-toggle[aria-pressed="false"] .theme-toggle-icon.sun {
+        opacity: 1;
+      }
+
+      .theme-toggle[aria-pressed="false"] .theme-toggle-icon.moon {
+        opacity: 0.68;
       }
 
       .hero {
@@ -409,7 +548,8 @@
         padding: 10px 14px;
         border-radius: 10px;
         border: 1px solid var(--border);
-        background: #fff;
+        background: var(--card);
+        color: var(--text);
       }
 
       .gallery {
@@ -533,6 +673,30 @@
         color: rgba(244, 241, 236, 0.72);
       }
 
+      body[data-theme="dark"] .brand-mark {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      body[data-theme="dark"] .card,
+      body[data-theme="dark"] .team-card {
+        background: linear-gradient(170deg, rgba(22, 35, 50, 0.96), rgba(16, 27, 39, 0.96));
+      }
+
+      body[data-theme="dark"] .project-card {
+        background: linear-gradient(180deg, rgba(18, 30, 44, 0.98), rgba(13, 22, 32, 0.96));
+      }
+
+      body[data-theme="dark"] .project-meta {
+        background: linear-gradient(180deg, rgba(20, 32, 47, 0.94), rgba(14, 24, 36, 0.94));
+      }
+
+      body[data-theme="dark"] .section.alt {
+        background:
+          linear-gradient(145deg, rgba(17, 31, 45, 0.92), rgba(12, 22, 32, 0.94)),
+          var(--bg-alt);
+      }
+
       .muted {
         color: var(--muted);
       }
@@ -543,12 +707,22 @@
           align-items: flex-start;
         }
 
+        .nav-tools {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
         .nav-links {
           width: 100%;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: thin;
           justify-content: flex-start;
+        }
+
+        .theme-toggle {
+          align-self: flex-end;
         }
 
         .nav-links a {
@@ -602,14 +776,32 @@
           </span>
           <span class="brand-text">Tri-EcoTeq Architects</span>
         </a>
-        <nav class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="services.html">Services</a>
-          <a class="active" href="portfolio.html">Portfolio</a>
-          <a class="cta" href="contact.html">Contact</a>
-          <a class="cta" href="buy-plan.html">Buy Plan</a>
-        </nav>
+        <div class="nav-tools">
+          <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a class="active" href="portfolio.html">Portfolio</a>
+            <a class="cta" href="contact.html">Contact</a>
+            <a class="cta" href="buy-plan.html">Buy Plan</a>
+            <button class="theme-toggle theme-toggle-nav" data-theme-toggle type="button" aria-label="Toggle light and dark theme" aria-pressed="false" title="Toggle theme">
+              <span class="theme-toggle-track" aria-hidden="true"></span>
+              <span class="theme-toggle-icon moon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M14.8 3.2a8.8 8.8 0 1 0 6 15 8.1 8.1 0 0 1-6.8-8 8.1 8.1 0 0 1 .8-7z" fill="currentColor"></path>
+                  <path d="M18.5 6.2l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5.5-1.4zm2.6 4.4l.3.9.9.3-.9.3-.3.9-.3-.9-.9-.3.9-.3.3-.9z" fill="currentColor"></path>
+                </svg>
+              </span>
+              <span class="theme-toggle-icon sun" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="4.2"></circle>
+                  <path d="M12 2.5v2.4M12 19.1v2.4M21.5 12h-2.4M4.9 12H2.5M18.7 5.3l-1.7 1.7M7 17l-1.7 1.7M18.7 18.7L17 17M7 7l-1.7-1.7"></path>
+                </svg>
+              </span>
+              <span class="theme-toggle-thumb" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -725,6 +917,7 @@
       <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
+    <script src="assets/theme-toggle.js"></script>
     <script>
       const categoryFilter = document.getElementById("categoryFilter");
       const yearFilter = document.getElementById("yearFilter");
@@ -747,7 +940,6 @@
         yearFilter.addEventListener("change", applyFilters);
       }
 
-      
     </script>
   </body>
 </html>
