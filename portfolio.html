@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/theme-toggle.css" />
+    <link rel="stylesheet" href="assets/page-loader.css" />
     <style>
       :root {
         --bg: #e3f0fb;
@@ -814,6 +815,12 @@
     </style>
   </head>
   <body>
+    <div class="page-loader" data-page-loader>
+      <div class="page-loader-shell">
+        <img class="page-loader-logo" src="assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq Architects logo" />
+        <div class="page-loader-cycle" aria-hidden="true"></div>
+      </div>
+    </div>
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="index.html">
@@ -954,6 +961,7 @@
       <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
+    <script src="assets/page-loader.js"></script>
     <script src="assets/content-store.js"></script>
     <script src="assets/theme-toggle.js"></script>
     <script>

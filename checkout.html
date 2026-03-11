@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/theme-toggle.css" />
+    <link rel="stylesheet" href="assets/page-loader.css" />
     <style>
       :root {
         --bg: #e3f0fb;
@@ -101,6 +102,7 @@
       .button.ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
       .actions { display: grid; gap: 10px; margin-top: 18px; }
       .empty { color: var(--muted); }
+      .button[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
       @media (max-width: 860px) {
         .layout { grid-template-columns: 1fr; }
         .payment-grid { grid-template-columns: 1fr; }
@@ -109,6 +111,12 @@
     </style>
   </head>
   <body>
+    <div class="page-loader" data-page-loader>
+      <div class="page-loader-shell">
+        <img class="page-loader-logo" src="assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq Architects logo" />
+        <div class="page-loader-cycle" aria-hidden="true"></div>
+      </div>
+    </div>
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="index.html">
@@ -161,12 +169,14 @@
             </div>
             <div class="actions">
               <a class="button" href="#" id="finalCheckoutBtn">Continue To Contact Details</a>
+              <button class="button ghost" type="button" id="clearCartBtn">Clear Basket</button>
               <a class="button ghost" href="buy-plan.html">Back To Plans</a>
             </div>
           </aside>
         </div>
       </div>
     </main>
+    <script src="assets/page-loader.js"></script>
     <script src="assets/content-store.js"></script>
     <script src="assets/theme-toggle.js"></script>
     <script>
@@ -177,6 +187,7 @@
       const summaryTotal = document.getElementById("summaryTotal");
       const offerNotice = document.getElementById("offerNotice");
       const finalCheckoutBtn = document.getElementById("finalCheckoutBtn");
+      const clearCartBtn = document.getElementById("clearCartBtn");
 
       function formatUsd(value) {
         return "$" + Number(value || 0).toLocaleString("en-US");
@@ -194,6 +205,10 @@
         const map = new Map();
         (store ? store.getPlans() : []).forEach((plan) => map.set(plan.id, plan));
         return map;
+      }
+
+      function clearCart() {
+        window.localStorage.removeItem(CART_STORAGE_KEY);
       }
 
       function getSelectedPaymentMethod() {
@@ -253,9 +268,11 @@
           finalCheckoutBtn.classList.add("ghost");
           finalCheckoutBtn.removeAttribute("href");
           finalCheckoutBtn.setAttribute("aria-disabled", "true");
+          clearCartBtn.setAttribute("aria-disabled", "true");
         } else {
           finalCheckoutBtn.classList.remove("ghost");
           finalCheckoutBtn.setAttribute("aria-disabled", "false");
+          clearCartBtn.setAttribute("aria-disabled", "false");
           const order = encodeURIComponent(items.map((item) => item.id + " x" + item.qty).join(", "));
           finalCheckoutBtn.href = "contact.html?order=" + order + "&total=" + encodeURIComponent(total) + "&payment=" + encodeURIComponent(getSelectedPaymentMethod());
         }
@@ -263,6 +280,11 @@
 
       document.querySelectorAll('input[name="paymentMethod"]').forEach((input) => {
         input.addEventListener("change", renderCheckout);
+      });
+
+      clearCartBtn.addEventListener("click", function () {
+        clearCart();
+        renderCheckout();
       });
 
       renderCheckout();

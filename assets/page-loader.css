@@ -1,0 +1,56 @@
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 246, 250, 0.96);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+body[data-theme="dark"] .page-loader {
+  background: rgba(12, 19, 28, 0.96);
+}
+
+.page-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-loader-shell {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+
+.page-loader-logo {
+  width: min(140px, 32vw);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 26px rgba(20, 34, 48, 0.16));
+}
+
+.page-loader-cycle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(31, 111, 139, 0.18);
+  border-top-color: #1f6f8b;
+  animation: page-loader-spin 0.85s linear infinite;
+}
+
+body[data-theme="dark"] .page-loader-cycle {
+  border-color: rgba(142, 213, 236, 0.18);
+  border-top-color: #8ed5ec;
+}
+
+@keyframes page-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
