@@ -493,6 +493,32 @@
         opacity: 0.88;
       }
 
+      .project-summary {
+        margin: 10px 0 0;
+        font-size: 0.94rem;
+        line-height: 1.6;
+      }
+
+      .project-price {
+        display: inline-flex;
+        align-self: flex-start;
+        margin-top: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(31, 111, 139, 0.12);
+        color: var(--accent);
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+
+      .project-empty {
+        padding: 24px;
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px dashed var(--border);
+        color: var(--muted);
+      }
+
       .project-card:hover .project-meta {
         transform: translateY(-2px);
       }
@@ -689,12 +715,32 @@
 
       body[data-theme="dark"] .project-meta {
         background: linear-gradient(180deg, rgba(20, 32, 47, 0.94), rgba(14, 24, 36, 0.94));
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .project-meta h3,
+      body[data-theme="dark"] .project-meta p,
+      body[data-theme="dark"] .section-header h2,
+      body[data-theme="dark"] .section-header p,
+      body[data-theme="dark"] .team-body h3,
+      body[data-theme="dark"] .team-body p {
+        color: inherit;
       }
 
       body[data-theme="dark"] .section.alt {
         background:
           linear-gradient(145deg, rgba(17, 31, 45, 0.92), rgba(12, 22, 32, 0.94)),
           var(--bg-alt);
+      }
+
+      body[data-theme="dark"] select,
+      body[data-theme="dark"] option {
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .project-price {
+        background: rgba(142, 213, 236, 0.14);
+        color: #b9ecfb;
       }
 
       .muted {
@@ -815,18 +861,9 @@
           <div class="filters">
             <select id="categoryFilter">
               <option value="all">All Categories</option>
-              <option value="Residential">Residential</option>
-              <option value="Interior">Interior</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Institutional">Institutional</option>
-              <option value="Hospitality">Hospitality</option>
-              <option value="Mixed-use">Mixed-use</option>
-              <option value="Civic">Civic</option>
             </select>
             <select id="yearFilter">
               <option value="all">All Years</option>
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
             </select>
           </div>
           <div class="grid-3" id="projectsGrid">
@@ -917,18 +954,110 @@
       <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
+    <script src="assets/content-store.js"></script>
     <script src="assets/theme-toggle.js"></script>
     <script>
+      const store = window.TEQContentStore;
       const categoryFilter = document.getElementById("categoryFilter");
       const yearFilter = document.getElementById("yearFilter");
-      const projectCards = document.querySelectorAll("#projectsGrid .project-card");
+      const projectsGrid = document.getElementById("projectsGrid");
+
+      function setFilterOptions(select, label, values) {
+        if (!select) return;
+
+        const previousValue = select.value || "all";
+        select.innerHTML = "";
+
+        const allOption = document.createElement("option");
+        allOption.value = "all";
+        allOption.textContent = label;
+        select.appendChild(allOption);
+
+        values.forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+        select.value = values.indexOf(previousValue) >= 0 ? previousValue : "all";
+      }
+
+      function renderProjects() {
+        if (!projectsGrid || !store) return;
+
+        const projects = store.getPortfolioProjects();
+        const categories = Array.from(new Set(projects.map((project) => project.category))).sort();
+        const years = Array.from(new Set(projects.map((project) => project.year))).sort().reverse();
+
+        setFilterOptions(categoryFilter, "All Categories", categories);
+        setFilterOptions(yearFilter, "All Years", years);
+
+        projectsGrid.innerHTML = "";
+
+        if (!projects.length) {
+          const emptyState = document.createElement("div");
+          emptyState.className = "project-empty";
+          emptyState.textContent = "No portfolio projects have been published yet.";
+          projectsGrid.appendChild(emptyState);
+          return;
+        }
+
+        projects.forEach((project) => {
+          const card = document.createElement("div");
+          card.className = "project-card";
+          card.dataset.category = project.category;
+          card.dataset.year = project.year;
+
+          const thumb = document.createElement("div");
+          thumb.className = "project-thumb";
+          if (project.image) {
+            thumb.style.backgroundImage = "url('" + project.image.replace(/'/g, "\\'") + "')";
+          }
+
+          const meta = document.createElement("div");
+          meta.className = "project-meta";
+
+          const title = document.createElement("h3");
+          title.textContent = project.title;
+
+          const location = document.createElement("p");
+          location.className = "muted";
+          location.textContent = project.location + " - " + project.year;
+
+          meta.appendChild(title);
+          meta.appendChild(location);
+
+          if (project.description) {
+            const summary = document.createElement("p");
+            summary.className = "project-summary";
+            summary.textContent = project.description;
+            meta.appendChild(summary);
+          }
+
+          if (project.priceLabel) {
+            const price = document.createElement("span");
+            price.className = "project-price";
+            price.textContent = project.priceLabel;
+            meta.appendChild(price);
+          }
+
+          card.appendChild(thumb);
+          card.appendChild(meta);
+          projectsGrid.appendChild(card);
+        });
+
+        applyFilters();
+      }
 
       function applyFilters() {
+        const projectCards = document.querySelectorAll("#projectsGrid .project-card");
         if (!projectCards.length) return;
+
         const cat = categoryFilter ? categoryFilter.value : "all";
         const year = yearFilter ? yearFilter.value : "all";
 
-        projectCards.forEach(card => {
+        projectCards.forEach((card) => {
           const matchesCat = cat === "all" || card.dataset.category === cat;
           const matchesYear = year === "all" || card.dataset.year === year;
           card.style.display = matchesCat && matchesYear ? "flex" : "none";
@@ -940,6 +1069,8 @@
         yearFilter.addEventListener("change", applyFilters);
       }
 
+      renderProjects();
+      window.addEventListener("teq-content-store:change", renderProjects);
     </script>
   </body>
 </html>

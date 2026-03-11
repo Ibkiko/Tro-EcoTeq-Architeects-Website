@@ -322,6 +322,16 @@
         overflow: hidden;
       }
 
+      .buy-plan-media-empty {
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        color: var(--muted);
+        text-align: center;
+      }
+
       .buy-plan-media img {
         position: absolute;
         inset: 12px 12px 0;
@@ -518,6 +528,28 @@
         opacity: 0.55;
         pointer-events: none;
       }
+
+      .offer-badge {
+        display: inline-flex;
+        align-self: flex-start;
+        margin-bottom: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(31, 111, 139, 0.12);
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .buy-plan-empty {
+        padding: 24px;
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px dashed var(--border);
+        color: var(--muted);
+      }
       .project-card {
         display: flex;
         flex-direction: column;
@@ -711,6 +743,43 @@
         color: rgba(244, 241, 236, 0.72);
       }
 
+      body[data-theme="dark"] .price-current {
+        color: #b9ecfb;
+      }
+
+      body[data-theme="dark"] .price-old {
+        color: #9cb1c5;
+        text-decoration-color: rgba(156, 177, 197, 0.85);
+      }
+
+      body[data-theme="dark"] .checkout-options {
+        background: rgba(20, 32, 47, 0.94);
+        border-color: rgba(210, 227, 244, 0.12);
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .checkout-title,
+      body[data-theme="dark"] .cart-head h2,
+      body[data-theme="dark"] .cart-total,
+      body[data-theme="dark"] .cart-item span {
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .payment-option {
+        background: rgba(15, 23, 34, 0.88);
+        border-color: rgba(210, 227, 244, 0.12);
+        color: var(--text);
+      }
+
+      body[data-theme="dark"] .payment-option input {
+        accent-color: #8ed5ec;
+      }
+
+      body[data-theme="dark"] .offer-badge {
+        background: rgba(142, 213, 236, 0.14);
+        color: #b9ecfb;
+      }
+
       .muted {
         color: var(--muted);
       }
@@ -812,7 +881,7 @@
               </div>
             </div>
           </div>
-          <div class="buy-plan-grid">
+          <div class="buy-plan-grid" id="buyPlansGrid">
           <article class="buy-plan-card">
             <div class="buy-plan-media">
               <img src="Images/Buy-Plan/Proj-2023-002.jpg" alt="Proj-2023-002 plan preview" loading="lazy" />
@@ -989,25 +1058,10 @@
       <div class="container footer-bottom">Copyright &copy; 2026 Tri-EcoTeq Architects. All rights reserved.</div>
     </footer>
 
+    <script src="assets/content-store.js"></script>
     <script src="assets/theme-toggle.js"></script>
     <script>
-  const planPricing = {
-    "Proj-2023-002": { current: 550 },
-    "Proj-2023-003": { current: 195, old: 200 },
-    "Proj-2023-008": { current: 670, old: 830 },
-    "Proj-2024-004": { current: 1500, old: 2000 },
-    "Proj-2024-005": { current: 1999, old: 2500 },
-    "Proj-2024-006": { current: 95, old: 150 },
-    "Proj-2025-001": { current: 230 },
-    "Proj-2025-003": { current: 450 },
-    "Proj-2025-005": { current: 950, old: 1300 },
-    "Proj-2025-006": { current: 1450, old: 1850 },
-    "Proj-2025-007": { current: 3050, old: 3500 },
-    "Proj-2025-008": { current: 1350, old: 1500 },
-    "Proj-2022-0091": { current: 0, offer: true }
-  };
-
-  const offerPlanId = "Proj-2022-0091";
+  const store = window.TEQContentStore;
   const cart = new Map();
   const cartCountEl = document.getElementById("cartCount");
   const cartListEl = document.getElementById("cartList");
@@ -1018,10 +1072,32 @@
   const checkoutOptionsEl = document.getElementById("checkoutOptions");
   const checkoutHintEl = document.getElementById("checkoutHint");
   const paymentMethodInputs = document.querySelectorAll('input[name="paymentMethod"]');
+  const buyPlansGrid = document.getElementById("buyPlansGrid");
 
   const toast = document.createElement("div");
   toast.className = "cart-toast";
   document.body.appendChild(toast);
+
+  function getPlans() {
+    return store ? store.getPlans() : [];
+  }
+
+  function getPlanPricing() {
+    const pricing = {};
+    getPlans().forEach((plan) => {
+      pricing[plan.id] = {
+        current: Number(plan.currentPrice) || 0,
+        old: plan.oldPrice === null || plan.oldPrice === "" ? null : Number(plan.oldPrice),
+        offer: Boolean(plan.offer)
+      };
+    });
+    return pricing;
+  }
+
+  function getOfferPlanId() {
+    const offerPlan = getPlans().find((plan) => plan.offer);
+    return offerPlan ? offerPlan.id : null;
+  }
 
   function showToast(message) {
     toast.textContent = message;
@@ -1030,7 +1106,7 @@
   }
 
   function formatUsd(value) {
-    return "$" + value.toLocaleString("en-US");
+    return "$" + Number(value || 0).toLocaleString("en-US");
   }
 
   function getSelectedPaymentMethod() {
@@ -1043,6 +1119,98 @@
     if (checkoutHintEl) {
       checkoutHintEl.textContent = "Selected: " + method;
     }
+  }
+
+  function renderPlanCards() {
+    const plans = getPlans();
+    if (!buyPlansGrid) return;
+
+    buyPlansGrid.innerHTML = "";
+
+    if (!plans.length) {
+      const emptyState = document.createElement("div");
+      emptyState.className = "buy-plan-empty";
+      emptyState.textContent = "No plans are available right now.";
+      buyPlansGrid.appendChild(emptyState);
+      return;
+    }
+
+    plans.forEach((plan) => {
+      const card = document.createElement("article");
+      card.className = "buy-plan-card";
+
+      const media = document.createElement("div");
+      media.className = "buy-plan-media";
+
+      if (Array.isArray(plan.images) && plan.images.length) {
+        plan.images.forEach((image, index) => {
+          const img = document.createElement("img");
+          img.src = image;
+          img.alt = plan.title + " plan preview";
+          img.loading = "lazy";
+          if (index === 0) {
+            img.classList.add("is-active");
+          }
+          media.appendChild(img);
+        });
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.className = "buy-plan-media-empty";
+        placeholder.textContent = "No preview image uploaded yet.";
+        media.appendChild(placeholder);
+      }
+
+      const meta = document.createElement("div");
+      meta.className = "buy-plan-meta";
+
+      if (plan.offer) {
+        const offerBadge = document.createElement("span");
+        offerBadge.className = "offer-badge";
+        offerBadge.textContent = "Special Offer";
+        meta.appendChild(offerBadge);
+      }
+
+      const title = document.createElement("h3");
+      title.textContent = plan.title || plan.id;
+
+      const description = document.createElement("p");
+      description.textContent = plan.description || "Ready completed design package with architectural working drawings and structural plans.";
+
+      const priceRow = document.createElement("div");
+      priceRow.className = "price-row";
+
+      const currentPrice = document.createElement("span");
+      currentPrice.className = "price-current";
+      currentPrice.textContent = formatUsd(plan.currentPrice);
+      priceRow.appendChild(currentPrice);
+
+      if (plan.oldPrice !== null && plan.oldPrice !== "" && Number(plan.oldPrice) > Number(plan.currentPrice)) {
+        const oldPrice = document.createElement("span");
+        oldPrice.className = "price-old";
+        oldPrice.textContent = "Was " + formatUsd(plan.oldPrice);
+        priceRow.appendChild(oldPrice);
+      }
+
+      const action = document.createElement("button");
+      action.type = "button";
+      action.className = "button ghost";
+      action.setAttribute("data-plan-id", plan.id);
+      action.textContent = plan.offer ? "Unlock at 3 Plans" : "Add to Cart";
+      action.addEventListener("click", function () {
+        addToCart(plan.id);
+      });
+
+      meta.appendChild(title);
+      meta.appendChild(description);
+      meta.appendChild(priceRow);
+      meta.appendChild(action);
+      card.appendChild(media);
+      card.appendChild(meta);
+      buyPlansGrid.appendChild(card);
+    });
+
+    initPlanImageSliders();
+    updateOfferButtonState();
   }
 
   function initPlanImageSliders() {
@@ -1075,8 +1243,13 @@
       nextBtn.setAttribute("aria-label", "Next image");
       nextBtn.textContent = ">";
 
-      prevBtn.addEventListener("click", () => setActive(activeIndex - 1));
-      nextBtn.addEventListener("click", () => setActive(activeIndex + 1));
+      prevBtn.addEventListener("click", function () {
+        setActive(activeIndex - 1);
+      });
+
+      nextBtn.addEventListener("click", function () {
+        setActive(activeIndex + 1);
+      });
 
       media.appendChild(prevBtn);
       media.appendChild(nextBtn);
@@ -1084,9 +1257,12 @@
   }
 
   function paidPlanCount() {
+    const offerPlanId = getOfferPlanId();
     let count = 0;
     cart.forEach((item, key) => {
-      if (key !== offerPlanId) count += item.qty;
+      if (key !== offerPlanId) {
+        count += item.qty;
+      }
     });
     return count;
   }
@@ -1096,6 +1272,9 @@
   }
 
   function updateOfferButtonState() {
+    const offerPlanId = getOfferPlanId();
+    if (!offerPlanId) return;
+
     const offerBtn = document.querySelector('[data-plan-id="' + offerPlanId + '"]');
     if (!offerBtn) return;
 
@@ -1110,6 +1289,8 @@
   }
 
   function updateCartUi() {
+    const planPricing = getPlanPricing();
+    const offerPlanId = getOfferPlanId();
     const totalItems = Array.from(cart.values()).reduce((sum, item) => sum + item.qty, 0);
     const total = Array.from(cart.values()).reduce((sum, item) => sum + (item.price * item.qty), 0);
     const paymentMethod = getSelectedPaymentMethod();
@@ -1122,8 +1303,10 @@
     }
 
     if (offerStatusEl) {
-      if (offerUnlocked()) {
-        offerStatusEl.innerHTML = "Offer unlocked: <b>" + offerPlanId + "</b> is now available at $0.";
+      if (!offerPlanId) {
+        offerStatusEl.textContent = "";
+      } else if (offerUnlocked()) {
+        offerStatusEl.innerHTML = "Offer unlocked: <b>" + offerPlanId + "</b> is now available at " + formatUsd(planPricing[offerPlanId].current) + ".";
       } else {
         const remaining = 3 - paidPlanCount();
         offerStatusEl.innerHTML = "Add " + remaining + " more paid plan" + (remaining === 1 ? "" : "s") + " to unlock <b>" + offerPlanId + "</b>.";
@@ -1138,7 +1321,15 @@
         cart.forEach((item, key) => {
           const li = document.createElement("li");
           li.className = "cart-item";
-          li.innerHTML = "<span>" + key + " x" + item.qty + "</span><span>" + formatUsd(item.price * item.qty) + "</span>";
+
+          const label = document.createElement("span");
+          label.textContent = key + " x" + item.qty;
+
+          const amount = document.createElement("span");
+          amount.textContent = formatUsd(item.price * item.qty);
+
+          li.appendChild(label);
+          li.appendChild(amount);
           cartListEl.appendChild(li);
         });
       }
@@ -1147,6 +1338,7 @@
     const queryItems = [];
     cart.forEach((item, key) => queryItems.push(key + " x" + item.qty));
     const order = encodeURIComponent(queryItems.join(", "));
+
     if (checkoutBtn) {
       if (totalItems > 0) {
         checkoutBtn.classList.remove("is-disabled");
@@ -1158,12 +1350,16 @@
         checkoutBtn.href = "#";
       }
     }
+
     if (checkoutOptionsEl) {
       checkoutOptionsEl.hidden = totalItems === 0;
     }
   }
 
   function addToCart(planId) {
+    const planPricing = getPlanPricing();
+    const offerPlanId = getOfferPlanId();
+
     if (!planPricing[planId]) return;
     if (planId === offerPlanId && !offerUnlocked()) {
       showToast("Offer unlocks after 3 paid plans");
@@ -1183,38 +1379,8 @@
     updateCartUi();
   }
 
-  function enhancePlanCards() {
-    const cards = document.querySelectorAll(".buy-plan-card .buy-plan-meta");
-    cards.forEach((meta) => {
-      const title = meta.querySelector("h3");
-      const action = meta.querySelector(".button.ghost");
-      if (!title || !action) return;
-      const planId = title.textContent.trim();
-      const priceConfig = planPricing[planId];
-      if (!priceConfig) return;
-
-      const priceRow = document.createElement("div");
-      priceRow.className = "price-row";
-      const oldPrice = priceConfig.old ? '<span class="price-old">Was ' + formatUsd(priceConfig.old) + '</span>' : '';
-      priceRow.innerHTML = '<span class="price-current">' + formatUsd(priceConfig.current) + '</span>' + oldPrice;
-
-      if (action.tagName.toLowerCase() === "a") {
-        action.setAttribute("href", "#");
-      }
-      action.setAttribute("role", "button");
-      action.setAttribute("data-plan-id", planId);
-      action.textContent = planId === offerPlanId ? "Unlock at 3 Plans" : "Add to Cart";
-      action.addEventListener("click", (event) => {
-        event.preventDefault();
-        addToCart(planId);
-      });
-
-      meta.insertBefore(priceRow, action);
-    });
-  }
-
   if (clearCartBtn) {
-    clearCartBtn.addEventListener("click", () => {
+    clearCartBtn.addEventListener("click", function () {
       cart.clear();
       updateOfferButtonState();
       updateCartUi();
@@ -1222,7 +1388,7 @@
   }
 
   if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (event) => {
+    checkoutBtn.addEventListener("click", function (event) {
       const totalItems = Array.from(cart.values()).reduce((sum, item) => sum + item.qty, 0);
       if (totalItems < 1) {
         event.preventDefault();
@@ -1232,17 +1398,20 @@
   }
 
   paymentMethodInputs.forEach((input) => {
-    input.addEventListener("change", () => {
+    input.addEventListener("change", function () {
       updateCheckoutMethodUi();
       updateCartUi();
     });
   });
 
-  initPlanImageSliders();
-  enhancePlanCards();
+  renderPlanCards();
   updateCheckoutMethodUi();
   updateOfferButtonState();
   updateCartUi();
+  window.addEventListener("teq-content-store:change", function () {
+    renderPlanCards();
+    updateCartUi();
+  });
 </script>
   </body>
 </html>
