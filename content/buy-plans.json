@@ -1,0 +1,159 @@
+[
+  {
+    "id": "Proj-2023-002",
+    "title": "Proj-2023-002",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 550,
+    "oldPrice": null,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2023-002.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2023-003",
+    "title": "Proj-2023-003",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 195,
+    "oldPrice": 200,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2023-003.jpg",
+      "Images/Buy-Plan/Proj-2023-0031.jpg",
+      "Images/Buy-Plan/Proj-2023-0032.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2023-008",
+    "title": "Proj-2023-008",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 670,
+    "oldPrice": 830,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2023-008.jpg",
+      "Images/Buy-Plan/Proj-2023-0081.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2024-004",
+    "title": "Proj-2024-004",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 1500,
+    "oldPrice": 2000,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2024-004.jpg",
+      "Images/Buy-Plan/Proj-2024-0041.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2024-005",
+    "title": "Proj-2024-005",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 1999,
+    "oldPrice": 2500,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2024-005.jpg",
+      "Images/Buy-Plan/Proj-2024-0051.jpg",
+      "Images/Buy-Plan/Proj-2024-0052.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2024-006",
+    "title": "Proj-2024-006",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 95,
+    "oldPrice": 150,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2024-006.jpg",
+      "Images/Buy-Plan/Proj-2024-0061.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-001",
+    "title": "Proj-2025-001",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 230,
+    "oldPrice": null,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-001.jpg",
+      "Images/Buy-Plan/Proj-2025-0011.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-003",
+    "title": "Proj-2025-003",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 450,
+    "oldPrice": null,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-003.jpg",
+      "Images/Buy-Plan/Proj-2025-0031.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-005",
+    "title": "Proj-2025-005",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 950,
+    "oldPrice": 1300,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-005.jpg",
+      "Images/Buy-Plan/Proj-2025-0051.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-006",
+    "title": "Proj-2025-006",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 1450,
+    "oldPrice": 1850,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-006.jpg",
+      "Images/Buy-Plan/Proj-2025-0061.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-007",
+    "title": "Proj-2025-007",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 3050,
+    "oldPrice": 3500,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-007.jpg",
+      "Images/Buy-Plan/Proj-2025-0071.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2025-008",
+    "title": "Proj-2025-008",
+    "description": "Ready completed design package with architectural working drawings and structural plans.",
+    "currentPrice": 1350,
+    "oldPrice": 1500,
+    "offer": false,
+    "images": [
+      "Images/Buy-Plan/Proj-2025-008.jpg",
+      "Images/Buy-Plan/Proj-2025-0081.jpg"
+    ]
+  },
+  {
+    "id": "Proj-2022-0091",
+    "title": "Proj-2022-0091",
+    "description": "Offer plan unlocked when you add 3 or more paid plans to cart.",
+    "currentPrice": 0,
+    "oldPrice": null,
+    "offer": true,
+    "images": [
+      "Images/Buy-Plan/Screenshot_2024-08-27-23-23-52-805_com.microsoft.skydrive.png",
+      "Images/Buy-Plan/Screenshot_2024-08-27-23-24-22-382_com.microsoft.skydrive.png"
+    ]
+  }
+]

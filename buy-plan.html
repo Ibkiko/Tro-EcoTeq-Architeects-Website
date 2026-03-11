@@ -1020,6 +1020,7 @@
   const store = window.TEQContentStore;
   const CART_STORAGE_KEY = "teq-buy-plan-cart-v1";
   const cart = new Map();
+  let plansCache = [];
   const basketCountBadgeEl = document.getElementById("basketCountBadge");
   const checkoutBtn = document.getElementById("checkoutBtn");
   const buyPlansGrid = document.getElementById("buyPlansGrid");
@@ -1028,8 +1029,20 @@
   toast.className = "cart-toast";
   document.body.appendChild(toast);
 
+  async function loadPlansSource() {
+    try {
+      const response = await fetch("content/buy-plans.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Failed to load buy plans");
+      }
+      plansCache = await response.json();
+    } catch (error) {
+      plansCache = store ? store.getPlans() : [];
+    }
+  }
+
   function getPlans() {
-    return store ? store.getPlans() : [];
+    return Array.isArray(plansCache) && plansCache.length ? plansCache : (store ? store.getPlans() : []);
   }
 
   function getPlanPricing() {
@@ -1296,14 +1309,15 @@
     });
   }
 
-  loadCart();
-  renderPlanCards();
-  updateOfferButtonState();
-  updateCartUi();
-  window.addEventListener("teq-content-store:change", function () {
+  async function initBuyPlanPage() {
+    loadCart();
+    await loadPlansSource();
     renderPlanCards();
+    updateOfferButtonState();
     updateCartUi();
-  });
+  }
+
+  initBuyPlanPage();
 </script>
   </body>
 </html>

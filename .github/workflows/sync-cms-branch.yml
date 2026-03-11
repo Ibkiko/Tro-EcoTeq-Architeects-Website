@@ -1,0 +1,46 @@
+name: Sync CMS Branch To Main
+
+on:
+  push:
+    branches:
+      - cms
+    paths:
+      - "content/**"
+      - "Images/Buy-Plan/**"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-to-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fetch cms branch
+        run: git fetch origin cms
+
+      - name: Sync managed content from cms
+        run: |
+          git checkout origin/cms -- content Images/Buy-Plan
+
+      - name: Commit synced files
+        run: |
+          if git diff --quiet -- content Images/Buy-Plan; then
+            echo "No synced changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content Images/Buy-Plan
+          git commit -m "Sync CMS content from cms branch"
+
+      - name: Push to main
+        run: |
+          if git rev-parse HEAD >/dev/null 2>&1; then
+            git push origin HEAD:main
+          fi
