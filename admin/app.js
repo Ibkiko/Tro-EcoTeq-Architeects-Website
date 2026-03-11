@@ -2,11 +2,19 @@
   var store = window.TEQContentStore;
   var AUTH_KEY = "teq-admin-auth-v1";
   var SESSION_KEY = "teq-admin-session-v1";
+  var GIT_SETTINGS_KEY = "teq-admin-git-settings-v1";
   var DEFAULT_AUTH = {
     accounts: [
       { username: "josejacques98@gmail.com", password: "Teq@2026" },
       { username: "ibrahibkiko26@gmail.com", password: "Teq@2026" }
     ]
+  };
+  var DEFAULT_GIT_SETTINGS = {
+    owner: "Ibkiko",
+    repo: "Tri-EcoTeq-Architects-Website",
+    branch: "cms",
+    token: "",
+    autoPublish: false
   };
 
   var loginView = document.getElementById("loginView");
@@ -45,6 +53,13 @@
   var credentialsForm = document.getElementById("credentialsForm");
   var adminUsername = document.getElementById("adminUsername");
   var adminPassword = document.getElementById("adminPassword");
+  var gitSettingsForm = document.getElementById("gitSettingsForm");
+  var gitRepoOwner = document.getElementById("gitRepoOwner");
+  var gitRepoName = document.getElementById("gitRepoName");
+  var gitBranch = document.getElementById("gitBranch");
+  var gitToken = document.getElementById("gitToken");
+  var gitAutoPublish = document.getElementById("gitAutoPublish");
+  var publishPlansBtn = document.getElementById("publishPlansBtn");
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -94,6 +109,30 @@
     window.localStorage.setItem(AUTH_KEY, JSON.stringify(normalizeAuth(auth)));
   }
 
+  function normalizeGitSettings(settings) {
+    var raw = settings || {};
+    return {
+      owner: String(raw.owner || DEFAULT_GIT_SETTINGS.owner).trim(),
+      repo: String(raw.repo || DEFAULT_GIT_SETTINGS.repo).trim(),
+      branch: String(raw.branch || DEFAULT_GIT_SETTINGS.branch).trim() || DEFAULT_GIT_SETTINGS.branch,
+      token: String(raw.token || ""),
+      autoPublish: Boolean(raw.autoPublish)
+    };
+  }
+
+  function getGitSettings() {
+    try {
+      var raw = window.localStorage.getItem(GIT_SETTINGS_KEY);
+      return raw ? normalizeGitSettings(JSON.parse(raw)) : clone(DEFAULT_GIT_SETTINGS);
+    } catch (error) {
+      return clone(DEFAULT_GIT_SETTINGS);
+    }
+  }
+
+  function saveGitSettings(settings) {
+    window.localStorage.setItem(GIT_SETTINGS_KEY, JSON.stringify(normalizeGitSettings(settings)));
+  }
+
   function isLoggedIn() {
     return window.sessionStorage.getItem(SESSION_KEY) === "true";
   }
@@ -136,6 +175,35 @@
         return entry.trim();
       })
       .filter(Boolean);
+  }
+
+  function slugifyFilePart(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function dataUrlToBase64(dataUrl) {
+    var match = String(dataUrl || "").match(/^data:([^;]+);base64,(.+)$/);
+    if (!match) return null;
+    return {
+      mimeType: match[1],
+      content: match[2]
+    };
+  }
+
+  function extensionFromMimeType(mimeType) {
+    if (mimeType === "image/jpeg") return "jpg";
+    if (mimeType === "image/png") return "png";
+    if (mimeType === "image/webp") return "webp";
+    if (mimeType === "image/gif") return "gif";
+    return "png";
+  }
+
+  function encodeUtf8Base64(value) {
+    return window.btoa(unescape(encodeURIComponent(value)));
   }
 
   function getData() {
@@ -415,11 +483,110 @@
     adminPassword.value = primaryAccount.password;
   }
 
+  function renderGitSettings() {
+    var settings = getGitSettings();
+    gitRepoOwner.value = settings.owner;
+    gitRepoName.value = settings.repo;
+    gitBranch.value = settings.branch;
+    gitToken.value = settings.token;
+    gitAutoPublish.checked = settings.autoPublish;
+  }
+
   function renderAll() {
     renderStats();
     renderProjectList();
     renderPlanList();
     renderCredentials();
+    renderGitSettings();
+  }
+
+  function getGithubApiBase(settings) {
+    return "https://api.github.com/repos/" + encodeURIComponent(settings.owner) + "/" + encodeURIComponent(settings.repo) + "/contents/";
+  }
+
+  async function githubRequest(path, options, settings) {
+    var requestOptions = options || {};
+    requestOptions.headers = Object.assign({
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + settings.token
+    }, requestOptions.headers || {});
+
+    var response = await window.fetch(getGithubApiBase(settings) + path, requestOptions);
+    if (response.status === 404) {
+      return null;
+    }
+    if (!response.ok) {
+      var text = await response.text();
+      throw new Error(text || "GitHub request failed");
+    }
+    return response.json();
+  }
+
+  async function getGithubFileSha(path, settings) {
+    var result = await githubRequest(path + "?ref=" + encodeURIComponent(settings.branch), { method: "GET" }, settings);
+    return result && result.sha ? result.sha : null;
+  }
+
+  async function putGithubFile(path, contentBase64, message, settings) {
+    var sha = await getGithubFileSha(path, settings);
+    var payload = {
+      message: message,
+      content: contentBase64,
+      branch: settings.branch
+    };
+    if (sha) {
+      payload.sha = sha;
+    }
+
+    return githubRequest(path, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    }, settings);
+  }
+
+  async function publishBuyPlansToGithub() {
+    var settings = getGitSettings();
+    var data = getData();
+    var plans = clone(data.plans || []);
+
+    if (!settings.owner || !settings.repo || !settings.branch || !settings.token) {
+      throw new Error("GitHub settings are incomplete");
+    }
+
+    for (var i = 0; i < plans.length; i += 1) {
+      var plan = plans[i];
+      var nextImages = [];
+      for (var j = 0; j < (plan.images || []).length; j += 1) {
+        var image = plan.images[j];
+        var dataUrl = dataUrlToBase64(image);
+
+        if (!dataUrl) {
+          nextImages.push(image);
+          continue;
+        }
+
+        var extension = extensionFromMimeType(dataUrl.mimeType);
+        var filename = slugifyFilePart(plan.id || plan.title || "plan") + "-" + String(Date.now()) + "-" + String(j + 1) + "." + extension;
+        var repoPath = "Images/Buy-Plan/" + filename;
+
+        await putGithubFile(repoPath, dataUrl.content, "Upload Buy Plan image for " + (plan.id || plan.title || "plan"), settings);
+        nextImages.push(repoPath);
+      }
+      plan.images = nextImages;
+    }
+
+    await putGithubFile(
+      "content/buy-plans.json",
+      encodeUtf8Base64(JSON.stringify(plans, null, 2)),
+      "Update Buy Plan content from admin",
+      settings
+    );
+
+    data.plans = plans;
+    saveData(data);
   }
 
   function syncAuthView() {
@@ -560,9 +727,15 @@
 
       saveData(data);
       clearPlanForm();
+      var gitSettings = getGitSettings();
+      if (gitSettings.autoPublish && gitSettings.token) {
+        return publishBuyPlansToGithub().then(function () {
+          showStatus("Plan saved and published");
+        });
+      }
       showStatus("Plan saved");
     }).catch(function () {
-      showStatus("Image upload failed");
+      showStatus("Plan save failed");
     });
   });
 
@@ -585,6 +758,18 @@
 
     saveAuth(auth);
     showStatus("Admin login updated");
+  });
+
+  gitSettingsForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    saveGitSettings({
+      owner: gitRepoOwner.value,
+      repo: gitRepoName.value,
+      branch: gitBranch.value,
+      token: gitToken.value,
+      autoPublish: gitAutoPublish.checked
+    });
+    showStatus("GitHub settings saved");
   });
 
   document.getElementById("exportBtn").addEventListener("click", function () {
@@ -626,6 +811,18 @@
     clearPlanForm();
     renderAll();
     showStatus("Defaults restored");
+  });
+
+  publishPlansBtn.addEventListener("click", function () {
+    publishPlansBtn.disabled = true;
+    publishBuyPlansToGithub().then(function () {
+      showStatus("Buy Plans published to GitHub");
+    }).catch(function (error) {
+      console.error(error);
+      showStatus("GitHub publish failed");
+    }).finally(function () {
+      publishPlansBtn.disabled = false;
+    });
   });
 
   window.addEventListener("teq-content-store:change", renderAll);

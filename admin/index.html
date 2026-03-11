@@ -212,6 +212,43 @@
               </form>
               <p class="warning">This admin panel stores content and credentials in local browser storage. It is suitable for local management, not for production-grade secure hosting.</p>
             </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h2>GitHub Publishing</h2>
+                <p class="panel-note">Push Buy Plan uploads and pricing into the <code>cms</code> branch.</p>
+              </div>
+              <form id="gitSettingsForm" class="stack">
+                <div class="split">
+                  <label>
+                    <span>Repo Owner</span>
+                    <input type="text" id="gitRepoOwner" placeholder="Ibkiko" required />
+                  </label>
+                  <label>
+                    <span>Repo Name</span>
+                    <input type="text" id="gitRepoName" placeholder="Tri-EcoTeq-Architects-Website" required />
+                  </label>
+                </div>
+                <div class="split">
+                  <label>
+                    <span>Branch</span>
+                    <input type="text" id="gitBranch" placeholder="cms" required />
+                  </label>
+                  <label class="checkbox">
+                    <span>Auto Publish Buy Plans</span>
+                    <input type="checkbox" id="gitAutoPublish" />
+                  </label>
+                </div>
+                <label>
+                  <span>GitHub Token</span>
+                  <input type="password" id="gitToken" placeholder="GitHub fine-grained token with contents write access" />
+                </label>
+                <div class="form-actions">
+                  <button type="submit" class="primary">Save Git Settings</button>
+                  <button type="button" class="ghost" id="publishPlansBtn">Publish Buy Plans Now</button>
+                </div>
+              </form>
+              <p class="hint">Use a GitHub token with write access to repository contents. Uploaded Buy Plan images will be committed to <code>Images/Buy-Plan/</code> and plan data to <code>content/buy-plans.json</code>.</p>
+            </article>
           </div>
         </section>
       </section>
