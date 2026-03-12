@@ -4,6 +4,12 @@
   const formEl = document.querySelector("#project-form");
   const submitBtn = formEl.querySelector("[data-submit]");
   const resetBtn = formEl.querySelector("[data-reset]");
+  const loginView = document.querySelector("#login-view");
+  const dashboardView = document.querySelector("#dashboard-view");
+  const loginForm = document.querySelector("#login-form");
+  const logoutBtn = document.querySelector("[data-logout]");
+  const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
+  const adminEmail = (window.ADMIN_META && window.ADMIN_META.adminEmail) || "";
 
   let editId = null;
   let demoMode = false;
@@ -76,6 +82,33 @@
     formEl.querySelectorAll("input, textarea, select, button").forEach((el) => {
       el.disabled = true;
     });
+  }
+
+  function setAuthToken(rawToken) {
+    const normalized =
+      rawToken && rawToken.startsWith("Bearer ") ? rawToken : rawToken ? `Bearer ${rawToken}` : "";
+    if (normalized) {
+      localStorage.setItem(tokenKey, normalized);
+      window.ADMIN_CONFIG.authToken = normalized;
+    }
+  }
+
+  function hasAuthToken() {
+    return Boolean(localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken);
+  }
+
+  function showLogin() {
+    document.body.classList.add("is-guest");
+    document.body.classList.remove("is-authenticated");
+    loginView.classList.remove("hidden");
+    dashboardView.classList.add("hidden");
+  }
+
+  function showDashboard() {
+    document.body.classList.add("is-authenticated");
+    document.body.classList.remove("is-guest");
+    loginView.classList.add("hidden");
+    dashboardView.classList.remove("hidden");
   }
 
   function setStatus(message, tone = "info") {
@@ -200,7 +233,48 @@
       window.AdminApi = createDemoApi();
       setStatus("Demo mode: data stored locally. Add admin/config.js to connect to real API.", "error");
     }
-    clearForm();
-    loadProjects();
+
+    if (!hasAuthToken()) {
+      showLogin();
+      setStatus("Login required");
+    } else {
+      showDashboard();
+      clearForm();
+      loadProjects();
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(loginForm);
+        const email = formData.get("email").trim();
+        const token = formData.get("token").trim();
+
+        if (adminEmail && email.toLowerCase() !== adminEmail.toLowerCase()) {
+          setStatus("Email not allowed", "error");
+          return;
+        }
+        if (!token) {
+          setStatus("Enter token/password", "error");
+          return;
+        }
+        setAuthToken(token);
+        setStatus("Signed in");
+        showDashboard();
+        clearForm();
+        loadProjects();
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem(tokenKey);
+        window.ADMIN_CONFIG.authToken = "";
+        demoMode = false;
+        setStatus("Logged out");
+        showLogin();
+        disableForm();
+      });
+    }
   });
 })();

@@ -6,45 +6,82 @@
   <title>Admin Dashboard | Projects</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="is-guest">
   <main class="shell">
-    <header>
-      <h1>Projects Admin</h1>
-      <div data-status>Ready.</div>
-    </header>
-
-    <section>
-      <form id="project-form" autocomplete="off">
-        <label>
-          Name
-          <input name="name" type="text" placeholder="New project name" required>
-        </label>
-        <label>
-          Description
-          <textarea name="description" placeholder="Short description" required></textarea>
-        </label>
-        <label>
-          Image URL
-          <input name="imageUrl" type="url" placeholder="https://..." >
-        </label>
-        <label>
-          Status
-          <select name="status">
-            <option value="draft">Draft</option>
-            <option value="published" selected>Published</option>
-            <option value="archived">Archived</option>
-          </select>
-        </label>
-        <div class="actions">
-          <button type="submit" class="primary" data-submit>Create Project</button>
-          <button type="button" class="secondary" data-reset style="display:none;">Cancel edit</button>
+    <section id="login-view" class="auth-view">
+      <div class="login-card">
+        <h1>Admin Login</h1>
+        <p class="muted">Use your admin email and token/password. Stored locally.</p>
+        <form id="login-form" class="stack">
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="username" placeholder="admin@tri-ecoteq.com" required>
+          </label>
+          <label>
+            Token / Password
+            <input name="token" type="password" autocomplete="current-password" placeholder="Bearer token or password" required>
+          </label>
+          <button type="submit" class="primary">Sign In</button>
+        </form>
+        <div class="hint">
+          <p>API: <code>https://tri-ecoteq-api.vercel.app/api</code></p>
+          <p>Stored token key: <code>tri_ecoteq_admin_token</code></p>
         </div>
-      </form>
+      </div>
     </section>
 
-    <section>
-      <h2>Projects</h2>
-      <ul data-project-list></ul>
+    <section id="dashboard-view" class="auth-view hidden">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Tri-EcoTeq Architects</p>
+          <h1>Projects Admin</h1>
+        </div>
+        <div class="topbar-actions">
+          <a class="ghost" href="../index.html">Main Site</a>
+          <a class="ghost" href="../portfolio.html">Portfolio</a>
+          <a class="ghost" href="../buy-plan.html">Buy Plan</a>
+          <button type="button" class="ghost" data-logout>Logout</button>
+        </div>
+      </header>
+
+      <div class="status-row">
+        <div data-status>Ready.</div>
+        <div class="muted tiny">API: <code>https://tri-ecoteq-api.vercel.app/api</code></div>
+      </div>
+
+      <section>
+        <form id="project-form" autocomplete="off">
+          <label>
+            Name
+            <input name="name" type="text" placeholder="New project name" required>
+          </label>
+          <label>
+            Description
+            <textarea name="description" placeholder="Short description" required></textarea>
+          </label>
+          <label>
+            Image URL
+            <input name="imageUrl" type="url" placeholder="https://..." >
+          </label>
+          <label>
+            Status
+            <select name="status">
+              <option value="draft">Draft</option>
+              <option value="published" selected>Published</option>
+              <option value="archived">Archived</option>
+            </select>
+          </label>
+          <div class="actions">
+            <button type="submit" class="primary" data-submit>Create Project</button>
+            <button type="button" class="secondary" data-reset style="display:none;">Cancel edit</button>
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        <ul data-project-list></ul>
+      </section>
     </section>
 
     <!-- Copy config.example.js to config.js and keep it private -->

@@ -4,21 +4,32 @@
     return;
   }
 
-  const { apiBaseUrl, authToken } = window.ADMIN_CONFIG;
+  const { apiBaseUrl } = window.ADMIN_CONFIG;
+  const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
 
-  const baseHeaders = {
-    "Content-Type": "application/json"
-  };
+  const baseHeaders = { "Content-Type": "application/json" };
 
-  if (authToken) {
-    baseHeaders.Authorization = authToken;
+  function getAuthToken() {
+    const cfgToken = window.ADMIN_CONFIG.authToken || "";
+    const stored = localStorage.getItem(tokenKey) || "";
+    if (stored) {
+      return stored.startsWith("Bearer ") ? stored : `Bearer ${stored}`;
+    }
+    if (cfgToken) {
+      return cfgToken.startsWith("Bearer ") ? cfgToken : `Bearer ${cfgToken}`;
+    }
+    return "";
   }
 
   async function apiRequest(path, options = {}) {
     const url = `${apiBaseUrl}${path}`;
+    const authToken = getAuthToken();
+    const headers = { ...baseHeaders, ...(options.headers || {}) };
+    if (authToken) headers.Authorization = authToken;
+
     const response = await fetch(url, {
       ...options,
-      headers: { ...baseHeaders, ...(options.headers || {}) }
+      headers
     });
 
     const contentType = response.headers.get("content-type") || "";
