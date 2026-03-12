@@ -6,6 +6,71 @@
   const resetBtn = formEl.querySelector("[data-reset]");
 
   let editId = null;
+  let demoMode = false;
+
+  const DEMO_SOURCE = "../content/buy-plans.json";
+  const DEMO_STORE_KEY = "teq-admin-demo-projects";
+
+  function createDemoApi() {
+    demoMode = true;
+
+    async function loadSeed() {
+      // Try cached demo store first
+      const cached = localStorage.getItem(DEMO_STORE_KEY);
+      if (cached) {
+        try {
+          return JSON.parse(cached);
+        } catch (e) {
+          localStorage.removeItem(DEMO_STORE_KEY);
+        }
+      }
+      // Fallback to static seed JSON
+      try {
+        const res = await fetch(DEMO_SOURCE, { cache: "no-store" });
+        if (!res.ok) throw new Error("Seed fetch failed");
+        const data = await res.json();
+        const mapped = (data || []).map((item) => ({
+          id: item.id,
+          name: item.title,
+          description: item.description,
+          imageUrl: item.images?.[0] || "",
+          status: item.offer ? "offer" : "published"
+        }));
+        localStorage.setItem(DEMO_STORE_KEY, JSON.stringify(mapped));
+        return mapped;
+      } catch (err) {
+        console.error("Demo seed load failed", err);
+        return [];
+      }
+    }
+
+    async function save(items) {
+      localStorage.setItem(DEMO_STORE_KEY, JSON.stringify(items));
+      return items;
+    }
+
+    return {
+      async fetchProjects() {
+        return loadSeed();
+      },
+      async createProject(data) {
+        const items = await loadSeed();
+        const id = data.id || `local-${Date.now()}`;
+        const next = [...items, { id, ...data }];
+        return save(next);
+      },
+      async updateProject(id, data) {
+        const items = await loadSeed();
+        const next = items.map((p) => (p.id === id ? { ...p, ...data } : p));
+        return save(next);
+      },
+      async deleteProject(id) {
+        const items = await loadSeed();
+        const next = items.filter((p) => p.id !== id);
+        return save(next);
+      }
+    };
+  }
 
   function disableForm() {
     formEl.querySelectorAll("input, textarea, select, button").forEach((el) => {
@@ -132,11 +197,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     const apiReady = window.AdminApi && typeof window.AdminApi.fetchProjects === "function";
     if (!apiReady) {
-      disableForm();
-      listEl.innerHTML =
-        '<li class="project-row"><div class="project-main"><strong>Admin API not configured</strong><span>Add admin/config.js (copy config.example.js) and set apiBaseUrl/authToken.</span></div></li>';
-      setStatus("Admin API not configured. Create admin/config.js from config.example.js.", "error");
-      return;
+      window.AdminApi = createDemoApi();
+      setStatus("Demo mode: data stored locally. Add admin/config.js to connect to real API.", "error");
     }
     clearForm();
     loadProjects();
