@@ -92,7 +92,7 @@
         currentPrice: 550,
         oldPrice: null,
         offer: false,
-        images: ["Images/Buy-Plan/Proj-2023-002.jpg"]
+        images: ["/Images/Buy-Plan/Proj-2023-002.jpg"]
       },
       {
         id: "Proj-2023-003",
@@ -102,9 +102,9 @@
         oldPrice: 200,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2023-003.jpg",
-          "Images/Buy-Plan/Proj-2023-0031.jpg",
-          "Images/Buy-Plan/Proj-2023-0032.jpg"
+          "/Images/Buy-Plan/Proj-2023-003.jpg",
+          "/Images/Buy-Plan/Proj-2023-0031.jpg",
+          "/Images/Buy-Plan/Proj-2023-0032.jpg"
         ]
       },
       {
@@ -115,8 +115,8 @@
         oldPrice: 830,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2023-008.jpg",
-          "Images/Buy-Plan/Proj-2023-0081.jpg"
+          "/Images/Buy-Plan/Proj-2023-008.jpg",
+          "/Images/Buy-Plan/Proj-2023-0081.jpg"
         ]
       },
       {
@@ -127,8 +127,8 @@
         oldPrice: 2000,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2024-004.jpg",
-          "Images/Buy-Plan/Proj-2024-0041.jpg"
+          "/Images/Buy-Plan/Proj-2024-004.jpg",
+          "/Images/Buy-Plan/Proj-2024-0041.jpg"
         ]
       },
       {
@@ -139,9 +139,9 @@
         oldPrice: 2500,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2024-005.jpg",
-          "Images/Buy-Plan/Proj-2024-0051.jpg",
-          "Images/Buy-Plan/Proj-2024-0052.jpg"
+          "/Images/Buy-Plan/Proj-2024-005.jpg",
+          "/Images/Buy-Plan/Proj-2024-0051.jpg",
+          "/Images/Buy-Plan/Proj-2024-0052.jpg"
         ]
       },
       {
@@ -152,8 +152,8 @@
         oldPrice: 150,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2024-006.jpg",
-          "Images/Buy-Plan/Proj-2024-0061.jpg"
+          "/Images/Buy-Plan/Proj-2024-006.jpg",
+          "/Images/Buy-Plan/Proj-2024-0061.jpg"
         ]
       },
       {
@@ -164,8 +164,8 @@
         oldPrice: null,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-001.jpg",
-          "Images/Buy-Plan/Proj-2025-0011.jpg"
+          "/Images/Buy-Plan/Proj-2025-001.jpg",
+          "/Images/Buy-Plan/Proj-2025-0011.jpg"
         ]
       },
       {
@@ -176,8 +176,8 @@
         oldPrice: null,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-003.jpg",
-          "Images/Buy-Plan/Proj-2025-0031.jpg"
+          "/Images/Buy-Plan/Proj-2025-003.jpg",
+          "/Images/Buy-Plan/Proj-2025-0031.jpg"
         ]
       },
       {
@@ -188,8 +188,8 @@
         oldPrice: 1300,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-005.jpg",
-          "Images/Buy-Plan/Proj-2025-0051.jpg"
+          "/Images/Buy-Plan/Proj-2025-005.jpg",
+          "/Images/Buy-Plan/Proj-2025-0051.jpg"
         ]
       },
       {
@@ -200,8 +200,8 @@
         oldPrice: 1850,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-006.jpg",
-          "Images/Buy-Plan/Proj-2025-0061.jpg"
+          "/Images/Buy-Plan/Proj-2025-006.jpg",
+          "/Images/Buy-Plan/Proj-2025-0061.jpg"
         ]
       },
       {
@@ -212,8 +212,8 @@
         oldPrice: 3500,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-007.jpg",
-          "Images/Buy-Plan/Proj-2025-0071.jpg"
+          "/Images/Buy-Plan/Proj-2025-007.jpg",
+          "/Images/Buy-Plan/Proj-2025-0071.jpg"
         ]
       },
       {
@@ -224,8 +224,8 @@
         oldPrice: 1500,
         offer: false,
         images: [
-          "Images/Buy-Plan/Proj-2025-008.jpg",
-          "Images/Buy-Plan/Proj-2025-0081.jpg"
+          "/Images/Buy-Plan/Proj-2025-008.jpg",
+          "/Images/Buy-Plan/Proj-2025-0081.jpg"
         ]
       },
       {
@@ -236,8 +236,8 @@
         oldPrice: null,
         offer: true,
         images: [
-          "Images/Buy-Plan/Screenshot_2024-08-27-23-23-52-805_com.microsoft.skydrive.png",
-          "Images/Buy-Plan/Screenshot_2024-08-27-23-24-22-382_com.microsoft.skydrive.png"
+          "/Images/Buy-Plan/Screenshot_2024-08-27-23-23-52-805_com.microsoft.skydrive.png",
+          "/Images/Buy-Plan/Screenshot_2024-08-27-23-24-22-382_com.microsoft.skydrive.png"
         ]
       }
     ]
