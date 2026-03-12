@@ -183,16 +183,13 @@
     if (!path) return "";
     if (/^https?:\/\//i.test(path)) return path;
     const normalized = path.replace(/^\.?\/*/, ""); // strip leading ./ or /
-
-    // Derive base path so it works on GitHub Pages (repo-name prefix) and Vercel (root).
-    const pathname = window.location.pathname;
+    const pathname = window.location.pathname || "/";
     const adminIndex = pathname.indexOf("/admin/");
-    const base =
+    const basePath =
       adminIndex >= 0
         ? pathname.slice(0, adminIndex + 1) // keep trailing slash
         : pathname.endsWith("/") ? pathname : pathname.replace(/[^/]+$/, "");
-
-    return base + normalized;
+    return window.location.origin + basePath + normalized;
   }
 
   window.AdminProjects = { init };

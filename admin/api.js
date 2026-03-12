@@ -16,9 +16,22 @@
     };
   }
 
+  function basePath() {
+    const path = window.location.pathname || "/";
+    const idx = path.indexOf("/admin/");
+    if (idx >= 0) return path.slice(0, idx + 1); // keep trailing slash
+    // fallback: strip file name
+    return path.endsWith("/") ? path : path.replace(/[^/]+$/, "");
+  }
+
+  function withBase(relativePath) {
+    const rel = relativePath.replace(/^\.?\/*/, "");
+    return `${basePath()}${rel}`;
+  }
+
   async function fetchPortfolioJson() {
     try {
-      const res = await fetch("../content/portfolio.json", { cache: "no-store" });
+      const res = await fetch(withBase("content/portfolio.json"), { cache: "no-store" });
       if (!res.ok) throw new Error("Content fetch failed");
       const json = await res.json();
       return Array.isArray(json) ? json : json.portfolioProjects || [];
