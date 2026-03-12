@@ -179,6 +179,10 @@
     loadProjects();
   }
 
+  function reload() {
+    loadProjects();
+  }
+
   function resolveMediaPath(path) {
     if (!path) return "";
     if (/^https?:\/\//i.test(path)) return path;
@@ -198,5 +202,5 @@
     return attempts[0];
   }
 
-  window.AdminProjects = { init };
+  window.AdminProjects = { init, reload };
 })();

@@ -1,14 +1,15 @@
 :root {
   color-scheme: light;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
   --bg: #f6f7fb;
   --panel: #ffffff;
   --line: #e3e7ef;
-  --text: #1b1f3b;
+  --text: #1a2333;
   --muted: #5f6b86;
-  --accent: #4a5de8;
-  --accent-strong: #233ea1;
-  --danger: #b23b3b;
+  --accent: #1f6f8b;
+  --accent-strong: #174f62;
+  --accent-soft: #e3f0fb;
+  --danger: #c24141;
   --shadow: 0 24px 70px rgba(17, 36, 94, 0.08);
 }
 
@@ -30,7 +31,10 @@ a {
 
 .login-body {
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, #ecf0ff, transparent 35%), radial-gradient(circle at 80% 0%, #e4f3ff, transparent 30%), var(--bg);
+  background:
+    radial-gradient(circle at 18% 14%, rgba(31, 111, 139, 0.18), transparent 30%),
+    radial-gradient(circle at 82% 0%, rgba(23, 79, 98, 0.18), transparent 26%),
+    var(--bg);
 }
 
 .login-shell {
@@ -104,7 +108,8 @@ a {
 
 .login-card h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 28px;
+  font-family: "Playfair Display", serif;
 }
 
 .login-note {
@@ -204,7 +209,10 @@ button.small {
 
 .dashboard-body {
   min-height: 100vh;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(31, 111, 139, 0.08), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(23, 79, 98, 0.06), transparent 26%),
+    var(--bg);
 }
 
 .layout {
@@ -214,11 +222,12 @@ button.small {
 }
 
 .sidebar {
-  background: #11192f;
+  background: linear-gradient(180deg, #0f1424 0%, #111a2f 100%);
   color: #e7ecff;
   padding: 24px 18px;
   display: grid;
   gap: 20px;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-brand {
@@ -250,6 +259,7 @@ button.small {
 .nav-link.is-active {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .nav-link.logout {
@@ -260,7 +270,7 @@ button.small {
 .main {
   padding: 28px 28px 48px;
   display: grid;
-  gap: 16px;
+  gap: 18px;
 }
 
 .topbar {
@@ -324,6 +334,21 @@ button.small {
   gap: 14px;
 }
 
+.quick-actions .chip-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  font-weight: 600;
+}
+
 .panel-head {
   display: flex;
   justify-content: space-between;
@@ -360,6 +385,7 @@ button.small {
   border-radius: 12px;
   overflow: hidden;
   background: #fdfdff;
+  box-shadow: 0 12px 30px rgba(17, 36, 94, 0.08);
 }
 
 .project-card-media img,

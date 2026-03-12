@@ -57,6 +57,13 @@
       window.AdminProjects.init({
         onStatus: setStatus
       });
+
+      const reloadBtn = document.getElementById("reload-projects");
+      if (reloadBtn) {
+        reloadBtn.addEventListener("click", () => {
+          window.AdminProjects.reload();
+        });
+      }
     }
   }
 
