@@ -97,25 +97,6 @@ a {
   pointer-events: none;
 }
 
-.login-card::after {
-  content: "";
-  position: absolute;
-  inset: -10px;
-  border-radius: 28px;
-  background:
-    conic-gradient(
-      from 0deg,
-      transparent 0deg 300deg,
-      rgba(255, 95, 109, 0.4) 305deg 315deg,
-      rgba(255, 195, 113, 0.35) 315deg 330deg,
-      rgba(87, 199, 255, 0.35) 330deg 350deg,
-      transparent 350deg 360deg
-    );
-  filter: blur(10px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
 h1,
 h2,
 h3,
