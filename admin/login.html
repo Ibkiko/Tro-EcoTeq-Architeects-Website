@@ -42,8 +42,10 @@
   <script>
     (function () {
       const form = document.getElementById("login-form");
-      const allowedAdmins = (window.ADMIN_META && window.ADMIN_META.allowedAdmins) || [];
-      const password = (window.ADMIN_META && window.ADMIN_META.loginPassword) || "";
+      const DEFAULT_ALLOWED = ["josejacques98@gmail.com", "ibrahibkiko26@gmail.com"];
+      const DEFAULT_PASSWORD = "Teq@2026";
+      const allowedAdmins = (window.ADMIN_META && window.ADMIN_META.allowedAdmins) || DEFAULT_ALLOWED;
+      const password = (window.ADMIN_META && window.ADMIN_META.loginPassword) || DEFAULT_PASSWORD;
       const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
       const SESSION_KEY = "admin_logged_in_v1";
 
@@ -64,7 +66,7 @@
         const email = normalizeEmail(form.email.value);
         const pwd = form.password.value.trim();
 
-        if (!allowedAdmins.includes(email)) {
+        if (Array.isArray(allowedAdmins) && allowedAdmins.length && !allowedAdmins.map(normalizeEmail).includes(email)) {
           alert("Email not allowed.");
           return;
         }
