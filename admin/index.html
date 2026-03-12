@@ -1,84 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Projects</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta http-equiv="refresh" content="0; url=login.html" />
+  <title>Admin | Tri-EcoTeq</title>
 </head>
-<body class="is-guest">
-  <main class="shell">
-    <section id="login-view" class="auth-view">
-      <div class="login-card">
-        <h1 class="center">Admin</h1>
-        <form id="login-form" class="stack">
-          <label class="sr-only" for="login-email">Email</label>
-          <input id="login-email" name="email" type="email" autocomplete="username" placeholder="Email" required>
-          <label class="sr-only" for="login-token">Password</label>
-          <input id="login-token" name="token" type="password" autocomplete="current-password" placeholder="Password" required>
-          <button type="submit" class="primary">Sign In</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="dashboard-view" class="auth-view hidden">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Tri-EcoTeq Architects</p>
-          <h1>Projects Admin</h1>
-        </div>
-        <div class="topbar-actions">
-          <a class="ghost" href="../index.html">Main Site</a>
-          <a class="ghost" href="../portfolio.html">Portfolio</a>
-          <a class="ghost" href="../buy-plan.html">Buy Plan</a>
-          <button type="button" class="ghost" data-logout>Logout</button>
-        </div>
-      </header>
-
-      <div class="status-row">
-        <div data-status>Ready.</div>
-        <div class="muted tiny">API: <code>https://tri-ecoteq-api.vercel.app/api</code></div>
-      </div>
-
-      <section>
-        <form id="project-form" autocomplete="off">
-          <label>
-            Name
-            <input name="name" type="text" placeholder="New project name" required>
-          </label>
-          <label>
-            Description
-            <textarea name="description" placeholder="Short description" required></textarea>
-          </label>
-          <label>
-            Image URL
-            <input name="imageUrl" type="url" placeholder="https://..." >
-          </label>
-          <label>
-            Status
-            <select name="status">
-              <option value="draft">Draft</option>
-              <option value="published" selected>Published</option>
-              <option value="archived">Archived</option>
-            </select>
-          </label>
-          <div class="actions">
-            <button type="submit" class="primary" data-submit>Create Project</button>
-            <button type="button" class="secondary" data-reset style="display:none;">Cancel edit</button>
-          </div>
-        </form>
-      </section>
-
-      <section>
-        <h2>Projects</h2>
-        <ul data-project-list></ul>
-      </section>
-    </section>
-
-    <!-- Copy config.example.js to config.js and keep it private -->
-    <script src="config.js"></script>
-    <script src="api.js"></script>
-    <script src="app.js"></script>
-  </main>
+<body>
+  <p>Redirecting to <a href="login.html">login</a>...</p>
 </body>
 </html>

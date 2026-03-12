@@ -1,55 +1,97 @@
-(() => {
-  if (!window.ADMIN_CONFIG) {
-    console.error("ADMIN_CONFIG is missing. Create admin/config.js from config.example.js.");
-    return;
-  }
-
-  const { apiBaseUrl } = window.ADMIN_CONFIG;
+(function () {
+  const store = window.TEQContentStore;
   const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
+  const apiBaseUrl = (window.ADMIN_CONFIG && window.ADMIN_CONFIG.apiBaseUrl) || "";
 
-  const baseHeaders = { "Content-Type": "application/json" };
-
-  function getAuthToken() {
-    const cfgToken = window.ADMIN_CONFIG.authToken || "";
-    const stored = localStorage.getItem(tokenKey) || "";
-    if (stored) {
-      return stored.startsWith("Bearer ") ? stored : `Bearer ${stored}`;
-    }
-    if (cfgToken) {
-      return cfgToken.startsWith("Bearer ") ? cfgToken : `Bearer ${cfgToken}`;
-    }
-    return "";
+  function normalizeProject(p) {
+    return {
+      id: p.id || "portfolio-" + Math.random().toString(36).slice(2, 8),
+      title: p.title || "Untitled",
+      description: p.description || "",
+      category: p.category || "",
+      location: p.location || "",
+      year: p.year || "",
+      priceLabel: p.priceLabel || "",
+      image: p.image || ""
+    };
   }
 
-  async function apiRequest(path, options = {}) {
-    const url = `${apiBaseUrl}${path}`;
-    const authToken = getAuthToken();
-    const headers = { ...baseHeaders, ...(options.headers || {}) };
-    if (authToken) headers.Authorization = authToken;
-
-    const response = await fetch(url, {
-      ...options,
-      headers
-    });
-
-    const contentType = response.headers.get("content-type") || "";
-    const isJson = contentType.includes("application/json");
-    const body = isJson ? await response.json().catch(() => null) : await response.text();
-
-    if (!response.ok) {
-      const message = isJson && body && body.message ? body.message : response.statusText;
-      throw new Error(message || `Request failed (${response.status})`);
+  async function fetchPortfolioJson() {
+    try {
+      const res = await fetch("../content/portfolio.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Content fetch failed");
+      const json = await res.json();
+      return Array.isArray(json) ? json : json.portfolioProjects || [];
+    } catch (err) {
+      return [];
     }
+  }
 
-    return body;
+  function readFromStore() {
+    if (store && typeof store.getPortfolioProjects === "function") {
+      return store.getPortfolioProjects();
+    }
+    return [];
+  }
+
+  function saveToStore(projects) {
+    if (!store || typeof store.saveData !== "function") return projects;
+    const data = store.getData();
+    const payload = { ...data, portfolioProjects: projects, updatedAt: new Date().toISOString() };
+    store.saveData(payload);
+    return projects;
+  }
+
+  async function getProjects() {
+    const fromFile = await fetchPortfolioJson();
+    if (fromFile.length) return fromFile.map(normalizeProject);
+    return readFromStore().map(normalizeProject);
+  }
+
+  async function saveProjects(projects) {
+    const normalized = projects.map(normalizeProject);
+    saveToStore(normalized);
+    // optional API sync if backend exists
+    if (apiBaseUrl) {
+      try {
+        const token = localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken || "";
+        await fetch(apiBaseUrl.replace(/\/$/, "") + "/projects-sync", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: token.startsWith("Bearer ") ? token : `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ projects: normalized })
+        });
+      } catch (err) {
+        console.warn("Remote sync failed (local data saved)", err);
+      }
+    }
+    return normalized;
+  }
+
+  async function createProject(project) {
+    const projects = await getProjects();
+    projects.push(normalizeProject(project));
+    return saveProjects(projects);
+  }
+
+  async function updateProject(id, data) {
+    const projects = await getProjects();
+    const next = projects.map((p) => (p.id === id ? { ...p, ...normalizeProject(data), id } : p));
+    return saveProjects(next);
+  }
+
+  async function deleteProject(id) {
+    const projects = await getProjects();
+    const next = projects.filter((p) => p.id !== id);
+    return saveProjects(next);
   }
 
   window.AdminApi = {
-    fetchProjects: () => apiRequest("/projects"),
-    createProject: (data) =>
-      apiRequest("/projects", { method: "POST", body: JSON.stringify(data) }),
-    updateProject: (id, data) =>
-      apiRequest(`/projects/${id}`, { method: "PUT", body: JSON.stringify(data) }),
-    deleteProject: (id) => apiRequest(`/projects/${id}`, { method: "DELETE" })
+    getProjects,
+    createProject,
+    updateProject,
+    deleteProject
   };
 })();

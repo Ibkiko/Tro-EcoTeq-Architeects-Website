@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin | Tri-EcoTeq</title>
+  <link rel="icon" type="image/png" href="../assets/favicon/logo-favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="login-body">
+  <div class="login-shell">
+    <header class="login-brand-bar">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark">
+          <img src="../assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq Architects logo" />
+        </span>
+        <span class="brand-text">
+          <strong>Tri-EcoTeq</strong>
+          <small>Architects</small>
+        </span>
+      </a>
+    </header>
+
+    <main class="login-main">
+      <section class="login-card">
+        <h1 class="center">Admin</h1>
+        <form id="login-form" class="stack">
+          <label class="sr-only" for="login-email">Email</label>
+          <input id="login-email" name="email" type="email" autocomplete="username" placeholder="Email" required />
+
+          <label class="sr-only" for="login-password">Password</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Password" required />
+
+          <button type="submit" class="primary">Log In</button>
+        </form>
+        <p class="login-note">Access restricted to authorized admins.</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById("login-form");
+      const allowedAdmins = (window.ADMIN_META && window.ADMIN_META.allowedAdmins) || [];
+      const password = (window.ADMIN_META && window.ADMIN_META.loginPassword) || "";
+      const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
+      const SESSION_KEY = "admin_logged_in_v1";
+
+      function normalizeEmail(value) {
+        return (value || "").trim().toLowerCase();
+      }
+
+      function saveSession(token) {
+        localStorage.setItem(SESSION_KEY, "1");
+        if (token) {
+          const normalized = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+          localStorage.setItem(tokenKey, normalized);
+        }
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = normalizeEmail(form.email.value);
+        const pwd = form.password.value.trim();
+
+        if (!allowedAdmins.includes(email)) {
+          alert("Email not allowed.");
+          return;
+        }
+        if (!pwd || (password && pwd !== password)) {
+          alert("Invalid password.");
+          return;
+        }
+
+        saveSession(pwd);
+        window.location.href = "dashboard.html";
+      });
+    })();
+  </script>
+</body>
+</html>

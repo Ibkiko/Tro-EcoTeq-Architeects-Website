@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard | Tri-EcoTeq</title>
+  <link rel="icon" type="image/png" href="../assets/favicon/logo-favicon.png" />
+  <link rel="stylesheet" href="../assets/page-loader.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-body">
+  <div class="page-loader" data-page-loader>
+    <div class="page-loader-shell">
+      <img class="page-loader-logo" src="../assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq Architects logo" />
+      <div class="page-loader-cycle" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark">
+          <img src="../assets/brand/Tri-EcoTeq Architects Logo.png" alt="Tri-EcoTeq logo" />
+        </span>
+        <div class="brand-text">
+          <strong>Tri-EcoTeq</strong>
+          <small>Admin</small>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link is-active" data-nav="dashboard">Dashboard</a>
+        <a class="nav-link" data-nav="projects">Projects</a>
+        <a class="nav-link" href="../portfolio.html" target="_blank">Portfolio</a>
+        <a class="nav-link" href="../buy-plan.html" target="_blank">Buy Plan</a>
+        <button class="nav-link logout" data-logout type="button">Logout</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Tri-EcoTeq Architects</p>
+          <h1>Admin Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <a class="ghost" href="../index.html" target="_blank">Main Site</a>
+          <a class="ghost" href="../portfolio.html" target="_blank">Portfolio</a>
+          <a class="ghost" href="../buy-plan.html" target="_blank">Buy Plan</a>
+        </div>
+      </header>
+
+      <section class="status-row">
+        <div data-status>Loading...</div>
+        <div class="muted tiny">API: <code id="api-url-label">n/a</code></div>
+      </section>
+
+      <section class="panel" id="dashboard-panel">
+        <div class="panel-head">
+          <h2>Projects</h2>
+          <button class="primary" id="new-project-btn">Add New Project</button>
+        </div>
+        <div id="projects-empty" class="empty hidden">No projects yet. Add your first project.</div>
+        <div id="projects-list" class="project-list"></div>
+      </section>
+
+      <section class="panel" id="editor-panel">
+        <div class="panel-head">
+          <h2 id="editor-title">Create Project</h2>
+          <div class="panel-actions">
+            <button class="secondary" id="reset-form-btn">Reset</button>
+          </div>
+        </div>
+        <form id="project-form" class="grid-form" autocomplete="off">
+          <input type="hidden" id="project-id" />
+          <label>
+            <span>Title</span>
+            <input id="project-title" type="text" placeholder="Project title" required />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea id="project-description" placeholder="Short description" required></textarea>
+          </label>
+          <label>
+            <span>Location</span>
+            <input id="project-location" type="text" placeholder="City, Country" />
+          </label>
+          <label>
+            <span>Category</span>
+            <input id="project-category" type="text" placeholder="Residential, Commercial..." />
+          </label>
+          <label>
+            <span>Image URL (optional)</span>
+            <input id="project-image-url" type="text" placeholder="../Images/..." />
+          </label>
+          <label class="upload">
+            <span>Upload Image (stores inline)</span>
+            <input id="project-image-file" type="file" accept="image/*" />
+            <small class="muted">Uses the existing images folder path if you set Image URL; file upload stores inline data.</small>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">Save Project</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="../assets/content-store.js"></script>
+  <script src="api.js"></script>
+  <script src="projects.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
