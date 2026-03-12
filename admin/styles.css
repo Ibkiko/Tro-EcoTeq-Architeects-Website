@@ -104,7 +104,7 @@ a {
   border-radius: 28px;
   background:
     conic-gradient(
-      from var(--glow-angle, 0deg),
+      from 0deg,
       transparent 0deg 300deg,
       rgba(255, 95, 109, 0.4) 305deg 315deg,
       rgba(255, 195, 113, 0.35) 315deg 330deg,
@@ -113,7 +113,6 @@ a {
     );
   filter: blur(10px);
   opacity: 0.9;
-  animation: login-glow 4s linear infinite;
   pointer-events: none;
 }
 
@@ -152,18 +151,6 @@ p {
   padding: 12px;
   border-radius: 12px;
   font-weight: 700;
-}
-
-@property --glow-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes login-glow {
-  to {
-    --glow-angle: 360deg;
-  }
 }
 
 .intro,
