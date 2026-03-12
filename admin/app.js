@@ -506,6 +506,60 @@
     return base.replace(/\/+$/, "");
   }
 
+  async function fetchFirstAvailable(urls) {
+    for (var i = 0; i < urls.length; i += 1) {
+      var url = urls[i];
+      try {
+        var response = await window.fetch(url, { cache: "no-store" });
+        if (!response.ok) continue;
+        return response.json();
+      } catch (err) {
+        continue;
+      }
+    }
+    throw new Error("No content sources reachable");
+  }
+
+  async function syncFromPublicContent() {
+    var base = getPublicBaseUrl();
+    var data = getData();
+
+    var portfolioSources = [];
+    var planSources = [];
+
+    if (base) {
+      portfolioSources.push(base + "/content/portfolio.json");
+      planSources.push(base + "/content/buy-plans.json");
+    }
+
+    portfolioSources.push("content/portfolio.json");
+    planSources.push("content/buy-plans.json");
+
+    try {
+      var remotePortfolio = await fetchFirstAvailable(portfolioSources);
+      if (Array.isArray(remotePortfolio)) {
+        data.portfolioProjects = remotePortfolio;
+      } else if (remotePortfolio && Array.isArray(remotePortfolio.portfolioProjects)) {
+        data.portfolioProjects = remotePortfolio.portfolioProjects;
+      }
+    } catch (err) {
+      /* ignore */
+    }
+
+    try {
+      var remotePlans = await fetchFirstAvailable(planSources);
+      if (Array.isArray(remotePlans)) {
+        data.plans = remotePlans;
+      } else if (remotePlans && Array.isArray(remotePlans.plans)) {
+        data.plans = remotePlans.plans;
+      }
+    } catch (err) {
+      /* ignore */
+    }
+
+    saveData(data);
+  }
+
   function applyPublicLinks() {
     var base = getPublicBaseUrl();
     if (!base) return;
@@ -911,5 +965,6 @@
   window.addEventListener("teq-content-store:change", renderAll);
 
   syncAuthView();
+  syncFromPublicContent();
   setActiveTab("portfolioTab");
 })();
