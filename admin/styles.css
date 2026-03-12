@@ -88,23 +88,42 @@ a {
   inset: -3px;
   padding: 3px;
   border-radius: 22px;
-  background: conic-gradient(
-    from 0deg,
-    #ff5f6d,
-    #ffc371,
-    #6fff8b,
-    #57c7ff,
-    #ae7bff,
-    #ff5f6d
-  );
+  background:
+    conic-gradient(
+      from var(--glow-angle, 0deg),
+      transparent 0deg 300deg,
+      #ff5f6d 305deg 315deg,
+      #ffc371 315deg 330deg,
+      #57c7ff 330deg 350deg,
+      transparent 350deg 360deg
+    );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: login-glow 6s linear infinite;
+  animation: login-glow 3.5s linear infinite;
   pointer-events: none;
-  box-shadow: 0 0 18px rgba(255, 95, 109, 0.35), 0 0 26px rgba(87, 199, 255, 0.25);
+}
+
+.login-card::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 28px;
+  background:
+    conic-gradient(
+      from var(--glow-angle, 0deg),
+      transparent 0deg 300deg,
+      rgba(255, 95, 109, 0.4) 305deg 315deg,
+      rgba(255, 195, 113, 0.35) 315deg 330deg,
+      rgba(87, 199, 255, 0.35) 330deg 350deg,
+      transparent 350deg 360deg
+    );
+  filter: blur(10px);
+  opacity: 0.85;
+  animation: login-glow 3.5s linear infinite;
+  pointer-events: none;
 }
 
 h1,
@@ -144,12 +163,15 @@ p {
   font-weight: 700;
 }
 
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 @keyframes login-glow {
-  from {
-    transform: rotate(0deg);
-  }
   to {
-    transform: rotate(360deg);
+    --glow-angle: 360deg;
   }
 }
 
