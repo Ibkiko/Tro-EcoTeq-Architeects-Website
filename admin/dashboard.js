@@ -53,11 +53,13 @@
   }
 
   function applyAssets() {
-    if (typeof window.assetUrl !== "function") return;
+    const resolver =
+      (typeof window.assetUrl === "function" && window.assetUrl) ||
+      ((path) => path);
     document.querySelectorAll("[data-asset-path]").forEach((el) => {
       const path = el.getAttribute("data-asset-path");
       if (!path) return;
-      el.src = window.assetUrl(path);
+      el.src = resolver(path);
     });
   }
 
@@ -66,9 +68,9 @@
     const cfg = window.ADMIN_CONFIG || {};
     const origin = window.location.origin.replace(/\/$/, "");
 
-    const mainUrl = meta.mainSiteUrl || cfg.mainSiteUrl || `${origin}/`;
-    const portfolioUrl = meta.portfolioUrl || cfg.portfolioUrl || `${origin}/portfolio`;
-    const buyPlanUrl = meta.buyPlanUrl || cfg.buyPlanUrl || `${origin}/buy-plan`;
+    const mainUrl = meta.mainSiteUrl || cfg.mainSiteUrl || `${origin}/index.html`;
+    const portfolioUrl = meta.portfolioUrl || cfg.portfolioUrl || `${origin}/portfolio.html`;
+    const buyPlanUrl = meta.buyPlanUrl || cfg.buyPlanUrl || `${origin}/buy-plan.html`;
 
     const targets = [
       { selector: "[data-link-main]", href: mainUrl },
