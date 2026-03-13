@@ -70,6 +70,29 @@
     return projects;
   }
 
+  async function triggerRebuild() {
+    const token = localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken || "";
+    const headers = { "Content-Type": "application/json" };
+    if (token) {
+      headers.Authorization = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+    }
+    try {
+      const res = await fetch("/api/rebuild", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ reason: "content-updated" })
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Rebuild failed (${res.status})`);
+      }
+      return true;
+    } catch (err) {
+      console.warn("Rebuild trigger failed", err);
+      return false;
+    }
+  }
+
   async function getProjects() {
     const fromStore = readFromStore();
     if (fromStore.length) return fromStore.map(normalizeProject);
@@ -103,6 +126,7 @@
         console.warn("Remote sync failed (local data saved)", err);
       }
     }
+    triggerRebuild();
     return normalized;
   }
 
