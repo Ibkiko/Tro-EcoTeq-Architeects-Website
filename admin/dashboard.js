@@ -52,6 +52,15 @@
     }
   }
 
+  function applyAssets() {
+    if (typeof window.assetUrl !== "function") return;
+    document.querySelectorAll("[data-asset-path]").forEach((el) => {
+      const path = el.getAttribute("data-asset-path");
+      if (!path) return;
+      el.src = window.assetUrl(path);
+    });
+  }
+
   function applyMainLinks() {
     const meta = window.ADMIN_META || {};
     const cfg = window.ADMIN_CONFIG || {};
@@ -98,6 +107,7 @@
     initLogout();
     initMeta();
     applyMainLinks();
+    applyAssets();
     initProjects();
     setStatus("Ready");
     const loader = document.querySelector("[data-page-loader]");

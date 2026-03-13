@@ -10,7 +10,8 @@
     LOGIN_PASSWORD: "Teq@2026",
     MAIN_SITE_URL: "https://tri-ecoteq.com",
     PORTFOLIO_URL: "https://tri-ecoteq.com/portfolio",
-    BUY_PLAN_URL: "https://tri-ecoteq.com/buy-plan"
+    BUY_PLAN_URL: "https://tri-ecoteq.com/buy-plan",
+    ASSET_BASE_URL: ""
   };
 
   const storedToken = localStorage.getItem(CONFIG.AUTH_TOKEN_KEY) || "";
@@ -26,7 +27,8 @@
     authToken: normalizedToken,
     mainSiteUrl: CONFIG.MAIN_SITE_URL,
     portfolioUrl: CONFIG.PORTFOLIO_URL,
-    buyPlanUrl: CONFIG.BUY_PLAN_URL
+    buyPlanUrl: CONFIG.BUY_PLAN_URL,
+    assetBaseUrl: CONFIG.ASSET_BASE_URL
   };
 
   window.ADMIN_META = {
@@ -37,6 +39,7 @@
     loginPassword: CONFIG.LOGIN_PASSWORD,
     mainSiteUrl: CONFIG.MAIN_SITE_URL,
     portfolioUrl: CONFIG.PORTFOLIO_URL,
-    buyPlanUrl: CONFIG.BUY_PLAN_URL
+    buyPlanUrl: CONFIG.BUY_PLAN_URL,
+    assetBaseUrl: CONFIG.ASSET_BASE_URL
   };
 })();
