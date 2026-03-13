@@ -53,19 +53,24 @@
   }
 
   function applyMainLinks() {
-    const base =
-      (window.ADMIN_META && window.ADMIN_META.mainSiteUrl) ||
-      (window.ADMIN_CONFIG && window.ADMIN_CONFIG.mainSiteUrl) ||
-      window.location.origin;
-    const normalized = (base || "").replace(/\/$/, "");
+    const meta = window.ADMIN_META || {};
+    const cfg = window.ADMIN_CONFIG || {};
+    const origin = window.location.origin.replace(/\/$/, "");
+
+    const mainUrl = meta.mainSiteUrl || cfg.mainSiteUrl || `${origin}/`;
+    const portfolioUrl = meta.portfolioUrl || cfg.portfolioUrl || `${origin}/portfolio`;
+    const buyPlanUrl = meta.buyPlanUrl || cfg.buyPlanUrl || `${origin}/buy-plan`;
+
     const targets = [
-      { selector: "[data-link-main]", path: "/" },
-      { selector: "[data-link-portfolio]", path: "/portfolio.html" },
-      { selector: "[data-link-buy-plan]", path: "/buy-plan.html" }
+      { selector: "[data-link-main]", href: mainUrl },
+      { selector: "[data-link-portfolio]", href: portfolioUrl },
+      { selector: "[data-link-buy-plan]", href: buyPlanUrl }
     ];
-    targets.forEach(({ selector, path }) => {
+
+    targets.forEach(({ selector, href }) => {
+      if (!href) return;
       document.querySelectorAll(selector).forEach((el) => {
-        el.href = `${normalized}${path}`;
+        el.href = href;
         el.target = "_blank";
         el.rel = "noreferrer noopener";
       });
