@@ -2,7 +2,7 @@
 // If your API requires auth, store the raw token in localStorage under AUTH_TOKEN_KEY.
 (function () {
   const CONFIG = {
-    API_URL: "https://tri-ecoteq-api.vercel.app/api",
+    API_URL: "/api",
     ADMIN_EMAIL: "admin@tri-ecoteq.com",
     STORAGE_URL: "https://cdn.tri-ecoteq.com",
     AUTH_TOKEN_KEY: "tri_ecoteq_admin_token",
