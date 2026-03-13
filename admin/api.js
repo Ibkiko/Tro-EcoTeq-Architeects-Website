@@ -1,7 +1,8 @@
 (function () {
   const store = window.TEQContentStore;
   const tokenKey = (window.ADMIN_META && window.ADMIN_META.tokenKey) || "tri_ecoteq_admin_token";
-  const apiBaseUrl = (window.ADMIN_CONFIG && window.ADMIN_CONFIG.apiBaseUrl) || "";
+  const apiBaseUrl = (window.ADMIN_CONFIG && window.ADMIN_CONFIG.apiBaseUrl) || "/api";
+  const apiRoot = apiBaseUrl.replace(/\/$/, "");
   // Seed store with bundled defaults if empty (ensures data even when remote fetch blocked)
   if (store && typeof store.getPortfolioProjects === "function" && store.getPortfolioProjects().length === 0) {
     if (typeof store.resetData === "function") {
@@ -70,14 +71,88 @@
     return projects;
   }
 
+  function authHeaders() {
+    const token = localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken || "";
+    return token ? { Authorization: token.startsWith("Bearer ") ? token : `Bearer ${token}` } : {};
+  }
+
+  async function remoteRequest(path, options = {}) {
+    const url = `${apiRoot}${path}`;
+    const headers = {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...(options.headers || {})
+    };
+    const res = await fetch(url, { ...options, headers });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || `API error (${res.status})`);
+    }
+    return res.json();
+  }
+
+  async function remoteGetProjects() {
+    const json = await remoteRequest("/projects", { method: "GET" });
+    return Array.isArray(json.projects) ? json.projects.map(normalizeProject) : [];
+  }
+
+  async function remoteCreateProject(project) {
+    const json = await remoteRequest("/projects", { method: "POST", body: JSON.stringify(project) });
+    await triggerRebuild();
+    return Array.isArray(json.projects) ? json.projects.map(normalizeProject) : [];
+  }
+
+  async function remoteUpdateProject(id, data) {
+    const json = await remoteRequest("/projects", { method: "PUT", body: JSON.stringify({ id, ...data }) });
+    await triggerRebuild();
+    return Array.isArray(json.projects) ? json.projects.map(normalizeProject) : [];
+  }
+
+  async function remoteDeleteProject(id) {
+    const json = await remoteRequest("/projects", { method: "DELETE", body: JSON.stringify({ id }) });
+    await triggerRebuild();
+    return Array.isArray(json.projects) ? json.projects.map(normalizeProject) : [];
+  }
+
+  async function triggerRebuild() {
+    const token = localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken || "";
+    const headers = { "Content-Type": "application/json" };
+    if (token) {
+      headers.Authorization = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+    }
+    try {
+      const res = await fetch("/api/rebuild", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ reason: "content-updated" })
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Rebuild failed (${res.status})`);
+      }
+      return true;
+    } catch (err) {
+      console.warn("Rebuild trigger failed", err);
+      return false;
+    }
+  }
+
   async function getProjects() {
+    // Prefer shared API
+    if (apiRoot) {
+      try {
+        return await remoteGetProjects();
+      } catch (err) {
+        console.warn("Remote fetch failed, falling back to local data", err);
+      }
+    }
+
     const fromStore = readFromStore();
     if (fromStore.length) return fromStore.map(normalizeProject);
 
     const fromFile = await fetchPortfolioJson();
     if (fromFile.length) return fromFile.map(normalizeProject);
 
-    // Last resort: use bundled defaults if exposed
     if (store && store.defaultData && store.defaultData.portfolioProjects) {
       return store.defaultData.portfolioProjects.map(normalizeProject);
     }
@@ -87,38 +162,44 @@
   async function saveProjects(projects) {
     const normalized = projects.map(normalizeProject);
     saveToStore(normalized);
-    // optional API sync if backend exists
-    if (apiBaseUrl) {
-      try {
-        const token = localStorage.getItem(tokenKey) || window.ADMIN_CONFIG.authToken || "";
-        await fetch(apiBaseUrl.replace(/\/$/, "") + "/projects-sync", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: token.startsWith("Bearer ") ? token : `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({ projects: normalized })
-        });
-      } catch (err) {
-        console.warn("Remote sync failed (local data saved)", err);
-      }
-    }
+    triggerRebuild();
     return normalized;
   }
 
   async function createProject(project) {
+    if (apiRoot) {
+      try {
+        return await remoteCreateProject(project);
+      } catch (err) {
+        console.warn("Remote create failed, falling back to local data", err);
+      }
+    }
     const projects = await getProjects();
     projects.push(normalizeProject(project));
     return saveProjects(projects);
   }
 
   async function updateProject(id, data) {
+    if (apiRoot) {
+      try {
+        return await remoteUpdateProject(id, data);
+      } catch (err) {
+        console.warn("Remote update failed, falling back to local data", err);
+      }
+    }
     const projects = await getProjects();
     const next = projects.map((p) => (p.id === id ? { ...p, ...normalizeProject(data), id } : p));
     return saveProjects(next);
   }
 
   async function deleteProject(id) {
+    if (apiRoot) {
+      try {
+        return await remoteDeleteProject(id);
+      } catch (err) {
+        console.warn("Remote delete failed, falling back to local data", err);
+      }
+    }
     const projects = await getProjects();
     const next = projects.filter((p) => p.id !== id);
     return saveProjects(next);

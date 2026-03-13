@@ -14,7 +14,7 @@
 <body class="dashboard-body">
   <div class="page-loader" data-page-loader>
     <div class="page-loader-shell">
-      <img class="page-loader-logo" src="/assets/brand/tri-ecoteq-architects-logo.png" alt="Tri-EcoTeq Architects logo" />
+      <img class="page-loader-logo" data-asset-path="/assets/brand/tri-ecoteq-architects-logo.png" src="/assets/brand/tri-ecoteq-architects-logo.png" alt="Tri-EcoTeq Architects logo" />
       <div class="page-loader-cycle" aria-hidden="true"></div>
     </div>
   </div>
@@ -23,7 +23,7 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <span class="brand-mark">
-          <img src="/assets/brand/tri-ecoteq-architects-logo.png" alt="Tri-EcoTeq logo" />
+          <img data-asset-path="/assets/brand/tri-ecoteq-architects-logo.png" src="/assets/brand/tri-ecoteq-architects-logo.png" alt="Tri-EcoTeq logo" />
         </span>
         <div class="brand-text">
           <strong>Tri-EcoTeq</strong>
@@ -33,8 +33,8 @@
       <nav class="sidebar-nav">
         <a class="nav-link is-active" data-nav="dashboard">Dashboard</a>
         <a class="nav-link" data-nav="projects">Projects</a>
-        <a class="nav-link" href="../portfolio.html" target="_blank">Portfolio</a>
-        <a class="nav-link" href="../buy-plan.html" target="_blank">Buy Plan</a>
+        <a class="nav-link" href="../portfolio.html" target="_blank" data-link-portfolio>Portfolio</a>
+        <a class="nav-link" href="../buy-plan.html" target="_blank" data-link-buy-plan>Buy Plan</a>
         <button class="nav-link logout" data-logout type="button">Logout</button>
       </nav>
     </aside>
@@ -45,16 +45,10 @@
           <p class="eyebrow">Tri-EcoTeq Architects</p>
           <h1>Admin Dashboard</h1>
         </div>
-        <div class="topbar-actions">
-          <a class="ghost" href="../index.html" target="_blank">Main Site</a>
-          <a class="ghost" href="../portfolio.html" target="_blank">Portfolio</a>
-          <a class="ghost" href="../buy-plan.html" target="_blank">Buy Plan</a>
-        </div>
       </header>
 
       <section class="status-row">
         <div data-status>Loading...</div>
-        <div class="muted tiny">API: <code id="api-url-label">n/a</code></div>
       </section>
 
       <section class="panel quick-actions">
@@ -62,13 +56,12 @@
           <h2>Quick Actions</h2>
           <div class="panel-actions">
             <button class="ghost" id="reload-projects">Reload Content</button>
-            <a class="ghost" href="../content/portfolio.json" target="_blank">View JSON</a>
           </div>
         </div>
         <div class="chip-row">
-          <a class="chip" href="../index.html" target="_blank">Main Site</a>
-          <a class="chip" href="../portfolio.html" target="_blank">Portfolio</a>
-          <a class="chip" href="../buy-plan.html" target="_blank">Buy Plan</a>
+          <a class="chip" href="../index.html" target="_blank" data-link-main>Main Site</a>
+          <a class="chip" href="../portfolio.html" target="_blank" data-link-portfolio>Portfolio</a>
+          <a class="chip" href="../buy-plan.html" target="_blank" data-link-buy-plan>Buy Plan</a>
         </div>
       </section>
 
@@ -125,6 +118,7 @@
 
   <script src="config.js"></script>
   <script src="/assets/content-store.js"></script>
+  <script src="/assets/asset-utils.js"></script>
   <script src="api.js"></script>
   <script src="projects.js"></script>
   <script src="dashboard.js"></script>

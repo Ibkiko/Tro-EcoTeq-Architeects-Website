@@ -52,6 +52,42 @@
     }
   }
 
+  function applyAssets() {
+    const resolver =
+      (typeof window.assetUrl === "function" && window.assetUrl) ||
+      ((path) => path);
+    document.querySelectorAll("[data-asset-path]").forEach((el) => {
+      const path = el.getAttribute("data-asset-path");
+      if (!path) return;
+      el.src = resolver(path);
+    });
+  }
+
+  function applyMainLinks() {
+    const meta = window.ADMIN_META || {};
+    const cfg = window.ADMIN_CONFIG || {};
+    const origin = window.location.origin.replace(/\/$/, "");
+
+    const mainUrl = meta.mainSiteUrl || cfg.mainSiteUrl || `${origin}/index.html`;
+    const portfolioUrl = meta.portfolioUrl || cfg.portfolioUrl || `${origin}/portfolio.html`;
+    const buyPlanUrl = meta.buyPlanUrl || cfg.buyPlanUrl || `${origin}/buy-plan.html`;
+
+    const targets = [
+      { selector: "[data-link-main]", href: mainUrl },
+      { selector: "[data-link-portfolio]", href: portfolioUrl },
+      { selector: "[data-link-buy-plan]", href: buyPlanUrl }
+    ];
+
+    targets.forEach(({ selector, href }) => {
+      if (!href) return;
+      document.querySelectorAll(selector).forEach((el) => {
+        el.href = href;
+        el.target = "_blank";
+        el.rel = "noreferrer noopener";
+      });
+    });
+  }
+
   function initProjects() {
     if (window.AdminProjects) {
       window.AdminProjects.init({
@@ -72,6 +108,8 @@
     initNav();
     initLogout();
     initMeta();
+    applyMainLinks();
+    applyAssets();
     initProjects();
     setStatus("Ready");
     const loader = document.querySelector("[data-page-loader]");
